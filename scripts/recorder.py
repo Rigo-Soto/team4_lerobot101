@@ -1,5 +1,5 @@
 # In your data collection script (e.g. record_episodes.py)
-from lerobot.common.datasets.lerobot_dataset import LeRobotDataset
+from lerobot.datasets.lerobot_dataset import LeRobotDataset
 from lerobot.cameras.opencv.configuration_opencv import OpenCVCameraConfig
 from lerobot.datasets.lerobot_dataset import LeRobotDataset
 from lerobot.datasets.utils import hw_to_dataset_features
@@ -134,12 +134,12 @@ def main():
         cameras={
             "front": OpenCVCameraConfig(index_or_path=0, width=640, height=480, fps=FPS) 
         },
-        port="/dev/tty.usbmodem58760434471",
+        port="/dev/ttyACM0",
     )
 
     teleop_config = SO101LeaderConfig(
         id="lider_de_la_rosa",
-        port="/dev/tty.usbmodem585A0077581",
+        port="/dev/ttyACM1",
     )
 
     # Initialize the robot and teleoperator
