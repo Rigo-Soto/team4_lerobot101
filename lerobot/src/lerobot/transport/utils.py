@@ -25,7 +25,7 @@ from typing import Any
 
 import torch
 
-from lerobot.src.lerobot.utils.transition import Transition
+from lerobot.utils.transition import Transition
 
 from . import services_pb2
 

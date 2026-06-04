@@ -18,11 +18,11 @@ from pprint import pformat
 
 import torch
 
-from lerobot.src.lerobot.configs import PreTrainedConfig
-from lerobot.src.lerobot.configs.rewards import RewardModelConfig
-from lerobot.src.lerobot.configs.train import TrainPipelineConfig
-from lerobot.src.lerobot.transforms import ImageTransforms
-from lerobot.src.lerobot.utils.constants import ACTION, IMAGENET_STATS, OBS_PREFIX, REWARD
+from lerobot.configs import PreTrainedConfig
+from lerobot.configs.rewards import RewardModelConfig
+from lerobot.configs.train import TrainPipelineConfig
+from lerobot.transforms import ImageTransforms
+from lerobot.utils.constants import ACTION, IMAGENET_STATS, OBS_PREFIX, REWARD
 
 from .dataset_metadata import LeRobotDatasetMetadata
 from .lerobot_dataset import LeRobotDataset

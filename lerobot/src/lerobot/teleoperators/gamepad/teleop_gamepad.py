@@ -20,8 +20,8 @@ from typing import Any
 
 import numpy as np
 
-from lerobot.src.lerobot.types import RobotAction
-from lerobot.src.lerobot.utils.decorators import check_if_not_connected
+from lerobot.types import RobotAction
+from lerobot.utils.decorators import check_if_not_connected
 
 from ..teleoperator import Teleoperator
 from ..utils import TeleopEvents

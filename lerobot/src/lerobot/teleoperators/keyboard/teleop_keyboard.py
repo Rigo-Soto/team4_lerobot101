@@ -21,9 +21,9 @@ import time
 from queue import Queue
 from typing import Any
 
-from lerobot.src.lerobot.types import RobotAction
-from lerobot.src.lerobot.utils.decorators import check_if_already_connected, check_if_not_connected
-from lerobot.src.lerobot.utils.import_utils import _pynput_available, require_package
+from lerobot.types import RobotAction
+from lerobot.utils.decorators import check_if_already_connected, check_if_not_connected
+from lerobot.utils.import_utils import _pynput_available, require_package
 
 from ..teleoperator import Teleoperator
 from ..utils import TeleopEvents

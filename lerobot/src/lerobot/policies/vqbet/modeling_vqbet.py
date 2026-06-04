@@ -27,7 +27,7 @@ import torch.nn.functional as F  # noqa: N812
 import torchvision
 from torch import Tensor, nn
 
-from lerobot.src.lerobot.utils.constants import ACTION, OBS_IMAGES, OBS_STATE
+from lerobot.utils.constants import ACTION, OBS_IMAGES, OBS_STATE
 
 from ..pretrained import PreTrainedPolicy
 from ..utils import get_device_from_parameters, get_output_shape, populate_queues

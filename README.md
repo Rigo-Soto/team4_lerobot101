@@ -13,6 +13,11 @@ to be executed
 **TODO: ADD IMAGES**
 
 
+## Building
+
+pip install git+https://github.com/huggingface/lerobot@1396b9fab7aecddd10006c33c47a487ffdcb54b4
+
+
 ## Running 
 
 

@@ -29,16 +29,16 @@ from collections.abc import Callable
 from concurrent.futures import ProcessPoolExecutor, ThreadPoolExecutor, as_completed
 from pathlib import Path
 
-import lerobot.src.lerobot.datasets as datasets
+import lerobot.datasets as datasets
 import numpy as np
 import pandas as pd
 import pyarrow.parquet as pq
 import torch
 from tqdm import tqdm
 
-from lerobot.src.lerobot.configs import VideoEncoderConfig, camera_encoder_defaults
-from lerobot.src.lerobot.utils.constants import ACTION, HF_LEROBOT_HOME, OBS_IMAGE, OBS_STATE
-from lerobot.src.lerobot.utils.utils import flatten_dict
+from lerobot.configs import VideoEncoderConfig, camera_encoder_defaults
+from lerobot.utils.constants import ACTION, HF_LEROBOT_HOME, OBS_IMAGE, OBS_STATE
+from lerobot.utils.utils import flatten_dict
 
 from .aggregate import aggregate_datasets
 from .compute_stats import (

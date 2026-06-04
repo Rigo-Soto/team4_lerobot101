@@ -36,7 +36,7 @@ import torch.nn.functional as F  # noqa: N812
 import torchvision
 from torch import Tensor
 
-from lerobot.src.lerobot.utils.import_utils import _diffusers_available, _transformers_available, require_package
+from lerobot.utils.import_utils import _diffusers_available, _transformers_available, require_package
 
 from .configuration_multi_task_dit import MultiTaskDiTConfig
 
@@ -53,7 +53,7 @@ if TYPE_CHECKING or _diffusers_available:
 else:
     DDIMScheduler = None
     DDPMScheduler = None
-from lerobot.src.lerobot.utils.constants import (
+from lerobot.utils.constants import (
     ACTION,
     OBS_IMAGES,
     OBS_LANGUAGE_ATTENTION_MASK,

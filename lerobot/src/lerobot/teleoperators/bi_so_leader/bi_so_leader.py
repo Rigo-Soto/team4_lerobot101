@@ -17,7 +17,7 @@
 import logging
 from functools import cached_property
 
-from lerobot.src.lerobot.utils.decorators import check_if_already_connected, check_if_not_connected
+from lerobot.utils.decorators import check_if_already_connected, check_if_not_connected
 
 from ..so_leader import SOLeader, SOLeaderTeleopConfig
 from ..teleoperator import Teleoperator

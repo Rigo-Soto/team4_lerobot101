@@ -29,9 +29,9 @@ from huggingface_hub.errors import HfHubHTTPError
 from safetensors.torch import load_model as load_model_as_safetensor, save_model as save_model_as_safetensor
 from torch import Tensor, nn
 
-from lerobot.src.lerobot.configs import PreTrainedConfig
-from lerobot.src.lerobot.configs.train import TrainPipelineConfig
-from lerobot.src.lerobot.utils.hub import HubMixin
+from lerobot.configs import PreTrainedConfig
+from lerobot.configs.train import TrainPipelineConfig
+from lerobot.utils.hub import HubMixin
 
 from .utils import log_model_loading_keys
 

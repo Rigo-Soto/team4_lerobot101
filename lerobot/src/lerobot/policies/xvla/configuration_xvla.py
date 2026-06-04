@@ -21,12 +21,12 @@ from __future__ import annotations
 from dataclasses import dataclass, field
 from typing import TYPE_CHECKING, Any
 
-from lerobot.src.lerobot.configs import FeatureType, NormalizationMode, PolicyFeature, PreTrainedConfig
-from lerobot.src.lerobot.optim import CosineDecayWithWarmupSchedulerConfig, XVLAAdamWConfig
-from lerobot.src.lerobot.utils.constants import OBS_IMAGES
+from lerobot.configs import FeatureType, NormalizationMode, PolicyFeature, PreTrainedConfig
+from lerobot.optim import CosineDecayWithWarmupSchedulerConfig, XVLAAdamWConfig
+from lerobot.utils.constants import OBS_IMAGES
 
 # Conditional import for type checking and lazy loading
-from lerobot.src.lerobot.utils.import_utils import _transformers_available
+from lerobot.utils.import_utils import _transformers_available
 
 if TYPE_CHECKING or _transformers_available:
     from .configuration_florence2 import Florence2Config

@@ -41,9 +41,9 @@ from typing import TypeVar
 import torch
 from torch import Tensor
 
-from lerobot.src.lerobot.configs import FeatureType, PolicyFeature
-from lerobot.src.lerobot.utils.constants import ACTION, OBS_IMAGES
-from lerobot.src.lerobot.utils.import_utils import require_package
+from lerobot.configs import FeatureType, PolicyFeature
+from lerobot.utils.constants import ACTION, OBS_IMAGES
+from lerobot.utils.import_utils import require_package
 
 from ..pretrained import PreTrainedPolicy
 from .configuration_groot import GrootConfig

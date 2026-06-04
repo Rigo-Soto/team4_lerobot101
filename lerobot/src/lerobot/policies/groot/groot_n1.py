@@ -22,7 +22,7 @@ import torch.nn as nn
 from huggingface_hub import snapshot_download
 from huggingface_hub.errors import HFValidationError, RepositoryNotFoundError
 
-from lerobot.src.lerobot.utils.import_utils import _transformers_available
+from lerobot.utils.import_utils import _transformers_available
 
 # Conditional import for type checking and lazy loading
 if TYPE_CHECKING or _transformers_available:
@@ -45,7 +45,7 @@ try:
 except ImportError:
     tree = None
 
-from lerobot.src.lerobot.utils.constants import ACTION, HF_LEROBOT_HOME
+from lerobot.utils.constants import ACTION, HF_LEROBOT_HOME
 
 from .action_head.flow_matching_action_head import (
     FlowmatchingActionHead,

@@ -16,7 +16,7 @@ from typing import Any
 
 import torch
 
-from lerobot.src.lerobot.processor import (
+from lerobot.processor import (
     DeviceProcessorStep,
     IdentityProcessorStep,
     NormalizerProcessorStep,

@@ -91,49 +91,49 @@ import time
 from dataclasses import asdict, dataclass
 from pprint import pformat
 
-from lerobot.src.lerobot.cameras import CameraConfig  # noqa: F401
-from lerobot.src.lerobot.cameras.opencv import OpenCVCameraConfig  # noqa: F401
-from lerobot.src.lerobot.cameras.reachy2_camera import Reachy2CameraConfig  # noqa: F401
-from lerobot.src.lerobot.cameras.realsense import RealSenseCameraConfig  # noqa: F401
-from lerobot.src.lerobot.cameras.zmq import ZMQCameraConfig  # noqa: F401
-from lerobot.src.lerobot.common.control_utils import (
+from lerobot.cameras import CameraConfig  # noqa: F401
+from lerobot.cameras.opencv import OpenCVCameraConfig  # noqa: F401
+from lerobot.cameras.reachy2_camera import Reachy2CameraConfig  # noqa: F401
+from lerobot.cameras.realsense import RealSenseCameraConfig  # noqa: F401
+from lerobot.cameras.zmq import ZMQCameraConfig  # noqa: F401
+from lerobot.common.control_utils import (
     init_keyboard_listener,
     is_headless,
     sanity_check_dataset_robot_compatibility,
 )
-from lerobot.src.lerobot.configs import parser
-from lerobot.src.lerobot.configs.dataset import DatasetRecordConfig
-from lerobot.src.lerobot.datasets import (
+from lerobot.configs import parser
+from lerobot.configs.dataset import DatasetRecordConfig
+from lerobot.datasets import (
     LeRobotDataset,
     VideoEncodingManager,
     aggregate_pipeline_dataset_features,
     create_initial_features,
     safe_stop_image_writer,
 )
-from lerobot.src.lerobot.processor import (
+from lerobot.processor import (
     RobotAction,
     RobotObservation,
     RobotProcessorPipeline,
     make_default_processors,
 )
-from lerobot.src.lerobot.robots import (  # noqa: F401
+from lerobot.robots import (  # noqa: F401
     unitree_g1 as unitree_g1_robot,
 )
-from lerobot.src.lerobot.robots import Robot, RobotConfig, bi_openarm_follower, bi_rebot_b601_follower, bi_so_follower, earthrover_mini_plus, hope_jr, koch_follower, make_robot_from_config, omx_follower, openarm_follower, reachy2, rebot_b601_follower, so_follower
-from lerobot.src.lerobot.teleoperators import Teleoperator, TeleoperatorConfig, bi_openarm_leader, bi_rebot_102_leader, bi_so_leader, homunculus, koch_leader, make_teleoperator_from_config, omx_leader, openarm_leader, openarm_mini, reachy2_teleoperator, rebot_102_leader, so_leader
-from lerobot.src.lerobot.teleoperators import (  # noqa: F401
+from lerobot.robots import Robot, RobotConfig, bi_openarm_follower, bi_rebot_b601_follower, bi_so_follower, earthrover_mini_plus, hope_jr, koch_follower, make_robot_from_config, omx_follower, openarm_follower, reachy2, rebot_b601_follower, so_follower
+from lerobot.teleoperators import Teleoperator, TeleoperatorConfig, bi_openarm_leader, bi_rebot_102_leader, bi_so_leader, homunculus, koch_leader, make_teleoperator_from_config, omx_leader, openarm_leader, openarm_mini, reachy2_teleoperator, rebot_102_leader, so_leader
+from lerobot.teleoperators import (  # noqa: F401
     unitree_g1,
 )
-from lerobot.src.lerobot.teleoperators.keyboard import KeyboardTeleop
-from lerobot.src.lerobot.utils.constants import ACTION, OBS_STR
-from lerobot.src.lerobot.utils.feature_utils import build_dataset_frame, combine_feature_dicts
-from lerobot.src.lerobot.utils.import_utils import register_third_party_plugins
-from lerobot.src.lerobot.utils.robot_utils import precise_sleep
-from lerobot.src.lerobot.utils.utils import (
+from lerobot.teleoperators.keyboard import KeyboardTeleop
+from lerobot.utils.constants import ACTION, OBS_STR
+from lerobot.utils.feature_utils import build_dataset_frame, combine_feature_dicts
+from lerobot.utils.import_utils import register_third_party_plugins
+from lerobot.utils.robot_utils import precise_sleep
+from lerobot.utils.utils import (
     init_logging,
     log_say,
 )
-from lerobot.src.lerobot.utils.visualization_utils import init_rerun, log_rerun_data
+from lerobot.utils.visualization_utils import init_rerun, log_rerun_data
 
 
 @dataclass

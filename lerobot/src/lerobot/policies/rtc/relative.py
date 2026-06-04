@@ -20,7 +20,7 @@ from __future__ import annotations
 
 import torch
 
-from lerobot.src.lerobot.processor import (
+from lerobot.processor import (
     NormalizerProcessorStep,
     RelativeActionsProcessorStep,
     TransitionKey,

@@ -23,7 +23,7 @@ Based on:
 
 from dataclasses import dataclass
 
-from lerobot.src.lerobot.configs import RTCAttentionSchedule
+from lerobot.configs import RTCAttentionSchedule
 
 
 @dataclass

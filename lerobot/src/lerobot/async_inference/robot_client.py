@@ -47,18 +47,18 @@ import draccus
 import grpc
 import torch
 
-from lerobot.src.lerobot.cameras.opencv import OpenCVCameraConfig  # noqa: F401
-from lerobot.src.lerobot.cameras.realsense import RealSenseCameraConfig  # noqa: F401
-from lerobot.src.lerobot.robots import (  # noqa: F401
+from lerobot.cameras.opencv import OpenCVCameraConfig  # noqa: F401
+from lerobot.cameras.realsense import RealSenseCameraConfig  # noqa: F401
+from lerobot.robots import (  # noqa: F401
     so_follower,
 )
-from lerobot.src.lerobot.robots import Robot, RobotConfig, bi_so_follower, koch_follower, make_robot_from_config, omx_follower
-from lerobot.src.lerobot.transport import services_pb2
-from lerobot.src.lerobot.transport import (
+from lerobot.robots import Robot, RobotConfig, bi_so_follower, koch_follower, make_robot_from_config, omx_follower
+from lerobot.transport import services_pb2
+from lerobot.transport import (
     services_pb2_grpc,  # type: ignore
 )
-from lerobot.src.lerobot.transport.utils import grpc_channel_options, send_bytes_in_chunks
-from lerobot.src.lerobot.utils.import_utils import register_third_party_plugins
+from lerobot.transport.utils import grpc_channel_options, send_bytes_in_chunks
+from lerobot.utils.import_utils import register_third_party_plugins
 
 from .configs import RobotClientConfig
 from .helpers import (

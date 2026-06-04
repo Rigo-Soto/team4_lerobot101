@@ -32,8 +32,8 @@ import torch.nn.functional as F  # noqa: N812
 import torchvision
 from torch import Tensor, nn
 
-from lerobot.src.lerobot.utils.constants import ACTION, OBS_ENV_STATE, OBS_IMAGES, OBS_STATE
-from lerobot.src.lerobot.utils.import_utils import _diffusers_available, require_package
+from lerobot.utils.constants import ACTION, OBS_ENV_STATE, OBS_IMAGES, OBS_STATE
+from lerobot.utils.import_utils import _diffusers_available, require_package
 
 if TYPE_CHECKING or _diffusers_available:
     from diffusers.schedulers.scheduling_ddim import DDIMScheduler

@@ -72,24 +72,24 @@ from termcolor import colored
 from torch import Tensor, nn
 from tqdm import trange
 
-from lerobot.src.lerobot.configs import parser
-from lerobot.src.lerobot.configs.eval import EvalPipelineConfig
-from lerobot.src.lerobot.envs import (
+from lerobot.configs import parser
+from lerobot.configs.eval import EvalPipelineConfig
+from lerobot.envs import (
     check_env_attributes_and_types,
     close_envs,
     make_env,
     make_env_pre_post_processors,
     preprocess_observation,
 )
-from lerobot.src.lerobot.policies import PreTrainedPolicy, make_policy, make_pre_post_processors
-from lerobot.src.lerobot.processor import PolicyProcessorPipeline
-from lerobot.src.lerobot.types import PolicyAction
-from lerobot.src.lerobot.utils.constants import ACTION, DONE, OBS_STR, REWARD
-from lerobot.src.lerobot.utils.device_utils import get_safe_torch_device
-from lerobot.src.lerobot.utils.import_utils import register_third_party_plugins
-from lerobot.src.lerobot.utils.io_utils import write_video
-from lerobot.src.lerobot.utils.random_utils import set_seed
-from lerobot.src.lerobot.utils.utils import (
+from lerobot.policies import PreTrainedPolicy, make_policy, make_pre_post_processors
+from lerobot.processor import PolicyProcessorPipeline
+from lerobot.types import PolicyAction
+from lerobot.utils.constants import ACTION, DONE, OBS_STR, REWARD
+from lerobot.utils.device_utils import get_safe_torch_device
+from lerobot.utils.import_utils import register_third_party_plugins
+from lerobot.utils.io_utils import write_video
+from lerobot.utils.random_utils import set_seed
+from lerobot.utils.utils import (
     init_logging,
     inside_slurm,
 )

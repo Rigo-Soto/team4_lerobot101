@@ -27,7 +27,7 @@ import math
 import torch
 from torch import Tensor
 
-from lerobot.src.lerobot.configs import RTCAttentionSchedule
+from lerobot.configs import RTCAttentionSchedule
 
 from .configuration_rtc import RTCConfig
 from .debug_tracker import Tracker

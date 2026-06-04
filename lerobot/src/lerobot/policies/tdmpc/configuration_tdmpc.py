@@ -16,8 +16,8 @@
 # limitations under the License.
 from dataclasses import dataclass, field
 
-from lerobot.src.lerobot.configs import NormalizationMode, PreTrainedConfig
-from lerobot.src.lerobot.optim import AdamConfig
+from lerobot.configs import NormalizationMode, PreTrainedConfig
+from lerobot.optim import AdamConfig
 
 
 @PreTrainedConfig.register_subclass("tdmpc")

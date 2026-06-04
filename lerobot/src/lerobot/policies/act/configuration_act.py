@@ -15,8 +15,8 @@
 # limitations under the License.
 from dataclasses import dataclass, field
 
-from lerobot.src.lerobot.configs import NormalizationMode, PreTrainedConfig
-from lerobot.src.lerobot.optim import AdamWConfig
+from lerobot.configs import NormalizationMode, PreTrainedConfig
+from lerobot.optim import AdamWConfig
 
 
 @PreTrainedConfig.register_subclass("act")

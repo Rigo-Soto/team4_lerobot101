@@ -29,14 +29,14 @@ from typing import TYPE_CHECKING, Any
 
 import torch
 
-from lerobot.src.lerobot.utils.import_utils import _transformers_available
+from lerobot.utils.import_utils import _transformers_available
 
 if TYPE_CHECKING or _transformers_available:
     from transformers import BatchFeature
 else:
     BatchFeature = None
 
-from lerobot.src.lerobot.utils.constants import OBS_IMAGES
+from lerobot.utils.constants import OBS_IMAGES
 
 from .constant import (
     CAMERA_NAME_MAPPING,

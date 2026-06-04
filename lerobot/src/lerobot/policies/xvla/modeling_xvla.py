@@ -29,9 +29,9 @@ import torch
 import torch.nn.functional as F  # noqa: N812
 from torch import Tensor, nn
 
-from lerobot.src.lerobot.configs import PreTrainedConfig
-from lerobot.src.lerobot.utils.constants import ACTION, OBS_LANGUAGE_TOKENS, OBS_STATE
-from lerobot.src.lerobot.utils.import_utils import _transformers_available, require_package
+from lerobot.configs import PreTrainedConfig
+from lerobot.utils.constants import ACTION, OBS_LANGUAGE_TOKENS, OBS_STATE
+from lerobot.utils.import_utils import _transformers_available, require_package
 
 from ..pretrained import PreTrainedPolicy, T
 from ..utils import populate_queues

@@ -28,12 +28,12 @@ from dataclasses import dataclass
 
 import draccus
 
-from lerobot.src.lerobot.robots import (  # noqa: F401
+from lerobot.robots import (  # noqa: F401
     so_follower,
 )
-from lerobot.src.lerobot.robots import RobotConfig, bi_rebot_b601_follower, bi_so_follower, koch_follower, lekiwi, make_robot_from_config, omx_follower, rebot_b601_follower
-from lerobot.src.lerobot.teleoperators import TeleoperatorConfig, bi_rebot_102_leader, bi_so_leader, koch_leader, make_teleoperator_from_config, omx_leader, openarm_mini, rebot_102_leader
-from lerobot.src.lerobot.teleoperators import (  # noqa: F401
+from lerobot.robots import RobotConfig, bi_rebot_b601_follower, bi_so_follower, koch_follower, lekiwi, make_robot_from_config, omx_follower, rebot_b601_follower
+from lerobot.teleoperators import TeleoperatorConfig, bi_rebot_102_leader, bi_so_leader, koch_leader, make_teleoperator_from_config, omx_leader, openarm_mini, rebot_102_leader
+from lerobot.teleoperators import (  # noqa: F401
     so_leader,
 )
 

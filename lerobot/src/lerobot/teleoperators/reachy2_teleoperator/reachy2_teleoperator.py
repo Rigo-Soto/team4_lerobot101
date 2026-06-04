@@ -19,15 +19,15 @@ import logging
 import time
 from typing import TYPE_CHECKING
 
-from lerobot.src.lerobot.utils.import_utils import _reachy2_sdk_available, require_package
+from lerobot.utils.import_utils import _reachy2_sdk_available, require_package
 
 if TYPE_CHECKING or _reachy2_sdk_available:
     from reachy2_sdk import ReachySDK
 else:
     ReachySDK = None
 
-from lerobot.src.lerobot.utils.decorators import check_if_already_connected, check_if_not_connected
-from lerobot.src.lerobot.utils.errors import DeviceNotConnectedError
+from lerobot.utils.decorators import check_if_already_connected, check_if_not_connected
+from lerobot.utils.errors import DeviceNotConnectedError
 
 from ..teleoperator import Teleoperator
 from .config_reachy2_teleoperator import Reachy2TeleoperatorConfig

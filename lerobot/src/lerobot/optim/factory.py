@@ -18,8 +18,8 @@
 from torch.optim import Optimizer
 from torch.optim.lr_scheduler import LRScheduler
 
-from lerobot.src.lerobot.configs.train import TrainPipelineConfig
-from lerobot.src.lerobot.policies import PreTrainedPolicy
+from lerobot.configs.train import TrainPipelineConfig
+from lerobot.policies import PreTrainedPolicy
 
 
 def make_optimizer_and_scheduler(

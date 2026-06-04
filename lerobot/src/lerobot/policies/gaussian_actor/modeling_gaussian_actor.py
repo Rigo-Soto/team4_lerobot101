@@ -23,7 +23,7 @@ import torch.nn as nn
 from torch import Tensor
 from torch.distributions import MultivariateNormal, TanhTransform, Transform, TransformedDistribution
 
-from lerobot.src.lerobot.utils.constants import ACTION, OBS_ENV_STATE, OBS_STATE
+from lerobot.utils.constants import ACTION, OBS_ENV_STATE, OBS_STATE
 
 from ..pretrained import PreTrainedPolicy
 from ..utils import get_device_from_parameters

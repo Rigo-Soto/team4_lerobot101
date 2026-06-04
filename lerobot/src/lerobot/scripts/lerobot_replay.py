@@ -47,19 +47,19 @@ from dataclasses import asdict, dataclass
 from pathlib import Path
 from pprint import pformat
 
-from lerobot.src.lerobot.configs import parser
-from lerobot.src.lerobot.datasets import LeRobotDataset
-from lerobot.src.lerobot.processor import (
+from lerobot.configs import parser
+from lerobot.datasets import LeRobotDataset
+from lerobot.processor import (
     make_default_robot_action_processor,
 )
-from lerobot.src.lerobot.robots import (  # noqa: F401
+from lerobot.robots import (  # noqa: F401
     unitree_g1,
 )
-from lerobot.src.lerobot.robots import Robot, RobotConfig, bi_openarm_follower, bi_rebot_b601_follower, bi_so_follower, earthrover_mini_plus, hope_jr, koch_follower, make_robot_from_config, omx_follower, openarm_follower, reachy2, rebot_b601_follower, so_follower
-from lerobot.src.lerobot.utils.constants import ACTION
-from lerobot.src.lerobot.utils.import_utils import register_third_party_plugins
-from lerobot.src.lerobot.utils.robot_utils import precise_sleep
-from lerobot.src.lerobot.utils.utils import (
+from lerobot.robots import Robot, RobotConfig, bi_openarm_follower, bi_rebot_b601_follower, bi_so_follower, earthrover_mini_plus, hope_jr, koch_follower, make_robot_from_config, omx_follower, openarm_follower, reachy2, rebot_b601_follower, so_follower
+from lerobot.utils.constants import ACTION
+from lerobot.utils.import_utils import register_third_party_plugins
+from lerobot.utils.robot_utils import precise_sleep
+from lerobot.utils.utils import (
     init_logging,
     log_say,
 )

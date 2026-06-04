@@ -24,10 +24,10 @@ import pyarrow as pa
 import pyarrow.parquet as pq
 from huggingface_hub import snapshot_download
 
-from lerobot.src.lerobot.configs import VideoEncoderConfig
-from lerobot.src.lerobot.utils.constants import DEFAULT_FEATURES, HF_LEROBOT_HOME, HF_LEROBOT_HUB_CACHE
-from lerobot.src.lerobot.utils.feature_utils import _validate_feature_names
-from lerobot.src.lerobot.utils.utils import flatten_dict
+from lerobot.configs import VideoEncoderConfig
+from lerobot.utils.constants import DEFAULT_FEATURES, HF_LEROBOT_HOME, HF_LEROBOT_HUB_CACHE
+from lerobot.utils.feature_utils import _validate_feature_names
+from lerobot.utils.utils import flatten_dict
 
 from .compute_stats import aggregate_stats
 from .feature_utils import create_empty_dataset_info

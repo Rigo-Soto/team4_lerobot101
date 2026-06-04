@@ -16,13 +16,13 @@
 import logging
 from pprint import pformat
 
-import lerobot.src.lerobot.datasets as datasets
+import lerobot.datasets as datasets
 import numpy as np
 from PIL import Image as PILImage
 
-from lerobot.src.lerobot.configs import VIDEO_ENCODER_INFO_KEYS
-from lerobot.src.lerobot.utils.constants import DEFAULT_FEATURES
-from lerobot.src.lerobot.utils.utils import is_valid_numpy_dtype_string
+from lerobot.configs import VIDEO_ENCODER_INFO_KEYS
+from lerobot.utils.constants import DEFAULT_FEATURES
+from lerobot.utils.utils import is_valid_numpy_dtype_string
 
 from .language import (
     LANGUAGE_PERSISTENT,

@@ -23,9 +23,9 @@ import cv2
 import numpy as np
 import requests
 
-from lerobot.src.lerobot.types import RobotAction, RobotObservation
-from lerobot.src.lerobot.utils.decorators import check_if_already_connected, check_if_not_connected
-from lerobot.src.lerobot.utils.errors import DeviceNotConnectedError
+from lerobot.types import RobotAction, RobotObservation
+from lerobot.utils.decorators import check_if_already_connected, check_if_not_connected
+from lerobot.utils.errors import DeviceNotConnectedError
 
 from ..robot import Robot
 from .config_earthrover_mini_plus import EarthRoverMiniPlusConfig

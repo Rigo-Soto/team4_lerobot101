@@ -20,12 +20,12 @@ from copy import deepcopy
 from dataclasses import dataclass, field
 from typing import TYPE_CHECKING
 
-from lerobot.src.lerobot.configs.policies import PreTrainedConfig
-from lerobot.src.lerobot.configs.types import FeatureType, NormalizationMode, PolicyFeature
-from lerobot.src.lerobot.optim.optimizers import AdamWConfig
-from lerobot.src.lerobot.optim.schedulers import CosineDecayWithWarmupSchedulerConfig
-from lerobot.src.lerobot.utils.constants import ACTION, OBS_STATE
-from lerobot.src.lerobot.utils.import_utils import _transformers_available, require_package
+from lerobot.configs.policies import PreTrainedConfig
+from lerobot.configs.types import FeatureType, NormalizationMode, PolicyFeature
+from lerobot.optim.optimizers import AdamWConfig
+from lerobot.optim.schedulers import CosineDecayWithWarmupSchedulerConfig
+from lerobot.utils.constants import ACTION, OBS_STATE
+from lerobot.utils.import_utils import _transformers_available, require_package
 
 if TYPE_CHECKING or _transformers_available:
     from transformers.models.qwen2_5_vl.configuration_qwen2_5_vl import (

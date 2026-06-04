@@ -21,8 +21,8 @@ from typing import TYPE_CHECKING, Any
 
 import torch
 
-from lerobot.src.lerobot.configs.types import FeatureType, PipelineFeatureType, PolicyFeature
-from lerobot.src.lerobot.processor import (
+from lerobot.configs.types import FeatureType, PipelineFeatureType, PolicyFeature
+from lerobot.processor import (
     AddBatchDimensionProcessorStep,
     ComplementaryDataProcessorStep,
     DeviceProcessorStep,
@@ -34,14 +34,14 @@ from lerobot.src.lerobot.processor import (
     RenameObservationsProcessorStep,
     UnnormalizerProcessorStep,
 )
-from lerobot.src.lerobot.processor.converters import policy_action_to_transition, transition_to_policy_action
-from lerobot.src.lerobot.types import TransitionKey
-from lerobot.src.lerobot.utils.constants import (
+from lerobot.processor.converters import policy_action_to_transition, transition_to_policy_action
+from lerobot.types import TransitionKey
+from lerobot.utils.constants import (
     OBS_STATE,
     POLICY_POSTPROCESSOR_DEFAULT_NAME,
     POLICY_PREPROCESSOR_DEFAULT_NAME,
 )
-from lerobot.src.lerobot.utils.import_utils import _transformers_available, require_package
+from lerobot.utils.import_utils import _transformers_available, require_package
 
 from .configuration_eo1 import EO1Config
 

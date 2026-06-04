@@ -22,7 +22,7 @@ import torch
 from einops import rearrange
 from PIL import Image
 
-from lerobot.src.lerobot.utils.import_utils import _transformers_available
+from lerobot.utils.import_utils import _transformers_available
 
 if TYPE_CHECKING or _transformers_available:
     from transformers import AutoProcessor, ProcessorMixin
@@ -30,12 +30,12 @@ else:
     AutoProcessor = None
     ProcessorMixin = object
 
-from lerobot.src.lerobot.configs import (
+from lerobot.configs import (
     FeatureType,
     NormalizationMode,
     PolicyFeature,
 )
-from lerobot.src.lerobot.processor import (
+from lerobot.processor import (
     AddBatchDimensionProcessorStep,
     DeviceProcessorStep,
     PolicyAction,
@@ -46,8 +46,8 @@ from lerobot.src.lerobot.processor import (
     policy_action_to_transition,
     transition_to_policy_action,
 )
-from lerobot.src.lerobot.types import EnvTransition, TransitionKey
-from lerobot.src.lerobot.utils.constants import (
+from lerobot.types import EnvTransition, TransitionKey
+from lerobot.utils.constants import (
     ACTION,
     HF_LEROBOT_HOME,
     OBS_IMAGE,

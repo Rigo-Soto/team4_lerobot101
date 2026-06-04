@@ -53,17 +53,17 @@ import numpy as np
 import torch
 from huggingface_hub import HfApi
 
-from lerobot.src.lerobot.configs import NormalizationMode
-from lerobot.src.lerobot.utils.import_utils import _transformers_available
+from lerobot.configs import NormalizationMode
+from lerobot.utils.import_utils import _transformers_available
 
 if TYPE_CHECKING or _transformers_available:
     from transformers import AutoProcessor
 else:
     AutoProcessor = None
 
-from lerobot.src.lerobot.configs import parser
-from lerobot.src.lerobot.datasets import LeRobotDataset
-from lerobot.src.lerobot.utils.constants import ACTION, OBS_STATE
+from lerobot.configs import parser
+from lerobot.datasets import LeRobotDataset
+from lerobot.utils.constants import ACTION, OBS_STATE
 
 
 @dataclass

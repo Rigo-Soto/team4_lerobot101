@@ -16,8 +16,8 @@
 
 from dataclasses import dataclass, field
 
-from lerobot.src.lerobot.transforms import ImageTransformsConfig
-from lerobot.src.lerobot.utils.import_utils import get_safe_default_video_backend
+from lerobot.transforms import ImageTransformsConfig
+from lerobot.utils.import_utils import get_safe_default_video_backend
 
 
 @dataclass

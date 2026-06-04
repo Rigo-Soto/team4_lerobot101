@@ -20,8 +20,8 @@ from typing import Any
 import numpy as np
 import torch
 
-from lerobot.src.lerobot.configs import PipelineFeatureType, PolicyFeature
-from lerobot.src.lerobot.processor import (
+from lerobot.configs import PipelineFeatureType, PolicyFeature
+from lerobot.processor import (
     AddBatchDimensionProcessorStep,
     DeviceProcessorStep,
     NormalizerProcessorStep,
@@ -36,8 +36,8 @@ from lerobot.src.lerobot.processor import (
     policy_action_to_transition,
     transition_to_policy_action,
 )
-from lerobot.src.lerobot.types import EnvTransition, TransitionKey
-from lerobot.src.lerobot.utils.constants import (
+from lerobot.types import EnvTransition, TransitionKey
+from lerobot.utils.constants import (
     IMAGENET_STATS,
     OBS_IMAGES,
     OBS_PREFIX,

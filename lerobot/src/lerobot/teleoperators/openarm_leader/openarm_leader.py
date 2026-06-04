@@ -18,10 +18,10 @@ import logging
 import time
 from typing import Any
 
-from lerobot.src.lerobot.motors import Motor, MotorCalibration, MotorNormMode
-from lerobot.src.lerobot.motors.damiao import DamiaoMotorsBus
-from lerobot.src.lerobot.types import RobotAction
-from lerobot.src.lerobot.utils.decorators import check_if_already_connected, check_if_not_connected
+from lerobot.motors import Motor, MotorCalibration, MotorNormMode
+from lerobot.motors.damiao import DamiaoMotorsBus
+from lerobot.types import RobotAction
+from lerobot.utils.decorators import check_if_already_connected, check_if_not_connected
 
 from ..teleoperator import Teleoperator
 from .config_openarm_leader import OpenArmLeaderConfig

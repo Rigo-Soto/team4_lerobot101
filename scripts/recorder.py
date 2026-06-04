@@ -1,11 +1,10 @@
 # In your data collection script (e.g. record_episodes.py)
-from lerobot.datasets.lerobot_dataset import LeRobotDataset
 from lerobot.cameras.opencv.configuration_opencv import OpenCVCameraConfig
 from lerobot.datasets.lerobot_dataset import LeRobotDataset
-from lerobot.datasets.utils import hw_to_dataset_features
-from lerobot.robots.so_follower import SO100Follower, SO100FollowerConfig
-from lerobot.teleoperators.so_leader.config_so100_leader import SO100LeaderConfig
-from lerobot.teleoperators.so_leader.so100_leader import SO100Leader
+from lerobot.datasets.feature_utils import hw_to_dataset_features
+from lerobot.robots.so_follower import SO101Follower, SO101FollowerConfig
+from lerobot.teleoperators.so_leader.config_so_leader import SO101LeaderConfig
+from lerobot.teleoperators.so_leader.so_leader import SO101Leader
 from lerobot.utils.control_utils import init_keyboard_listener
 from lerobot.utils.utils import log_say
 from lerobot.utils.visualization_utils import init_rerun
@@ -14,14 +13,24 @@ from lerobot.processor import make_default_processors
 
 from yolo_extract import YOLODetector, extract_feature_vector
 
+import logging
+from pathlib import Path
+import cv2
+
+
 NUM_EPISODES = 5
 FPS = 30
 EPISODE_TIME_SEC = 60
 RESET_TIME_SEC = 10
 TASK_DESCRIPTION = "LEGO deconstructor"
 
-YOLO_WEIGHTS = "backup/yolov4-tiny-custom_final.weights"
-YOLO_CONFIG = "custom_cfg/yolov4-tiny-custom.cfg"
+WORK_DIR = Path(".").resolve()
+CFG_PATH = WORK_DIR / "custom_cfg/yolov4-tiny-custom.cfg"
+WEIGHTS_PATH = WORK_DIR / "backup/yolov4-tiny-custom_final.weights"
+
+PORT_LEADER = "/dev/ttyACM0"
+PORT_FOLLOW = "/dev/ttyACM1"
+CAM_INDEX = 2
 
 YOLO_CONF_THRESHOLD = 0.45
 YOLO_NMS_THRESHOLD  = 0.4
@@ -45,14 +54,14 @@ class YOLOObservationProcessor:
  
     def __init__(
         self,
-        base_processor: Any,
+        base_processor: any,
         detector: YOLODetector,
         debug_overlay: bool = False,
     ):
         self.base_processor  = base_processor
         self.detector        = detector
         # LeRobot stores images under this key pattern in the observation dict
-        self.image_obs_key   = f"observation.images"
+        self.image_obs_key   = f"front"
         self.debug_overlay   = debug_overlay
         self._last_detections: dict = {}   # expose for external logging
  
@@ -69,6 +78,7 @@ class YOLOObservationProcessor:
         frame = processed.get(self.image_obs_key)
         if frame is not None:
             # frame may be a torch.Tensor (C, H, W) or np.ndarray (H, W, C)
+            frame = cv2.cvtColor(frame, cv2.COLOR_RGB2BGR)
             if hasattr(frame, "numpy"):
                 # Convert CHW float tensor → HWC uint8 for OpenCV
                 np_frame = (frame.permute(1, 2, 0).numpy() * 255).astype(np.uint8)
@@ -88,11 +98,12 @@ class YOLOObservationProcessor:
                 f"[YOLO] Key '{self.image_obs_key}' not found in observation. "
                 "Check that YOLO_CAMERA_KEY matches your camera config."
             )
+
             detections = {}
             self._last_detections = {}
  
         # Step 3 — append feature vector
-        feat_vec = extract_yolo_feature_vector(detections, np_frame.shape if frame is not None else (480, 640))
+        feat_vec = extract_feature_vector(detections, np_frame.shape if frame is not None else (480, 640))
         processed["observation.yolo_features"] = feat_vec
  
         return processed
@@ -126,25 +137,25 @@ def make_yolo_dataset_feature() -> dict:
 def main():
     logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(message)s")
  
-    detector = YOLODetector("weights/tiny_yolov4.weights", "cfg/tiny_yolov4.cfg",use_gpu=False)
+    detector = YOLODetector(WEIGHTS_PATH, CFG_PATH)
 
     # Create robot configuration
     robot_config = SO101FollowerConfig(
         id="follower_dlr",
         cameras={
-            "front": OpenCVCameraConfig(index_or_path=0, width=640, height=480, fps=FPS) 
+            "front": OpenCVCameraConfig(index_or_path=CAM_INDEX, width=640, height=480, fps=FPS) 
         },
-        port="/dev/ttyACM0",
+        port=PORT_FOLLOW,
     )
 
     teleop_config = SO101LeaderConfig(
         id="lider_de_la_rosa",
-        port="/dev/ttyACM1",
+        port=PORT_LEADER,
     )
 
     # Initialize the robot and teleoperator
-    robot = SO100Follower(robot_config)
-    teleop = SO100Leader(teleop_config)
+    robot = SO101Follower(robot_config)
+    teleop = SO101Leader(teleop_config)
 
     # Configure the dataset features
     action_features = hw_to_dataset_features(robot.action_features, "action")

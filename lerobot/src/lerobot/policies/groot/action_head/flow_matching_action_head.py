@@ -21,7 +21,7 @@ import torch.nn.functional as F  # noqa: N812
 from torch import nn
 from torch.distributions import Beta
 
-from lerobot.src.lerobot.utils.import_utils import _transformers_available
+from lerobot.utils.import_utils import _transformers_available
 
 # Conditional import for type checking and lazy loading
 if TYPE_CHECKING or _transformers_available:

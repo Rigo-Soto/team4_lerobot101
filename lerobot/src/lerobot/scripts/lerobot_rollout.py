@@ -136,23 +136,23 @@ Usage examples
 
 import logging
 
-from lerobot.src.lerobot.cameras.opencv import OpenCVCameraConfig  # noqa: F401
-from lerobot.src.lerobot.cameras.realsense import RealSenseCameraConfig  # noqa: F401
-from lerobot.src.lerobot.cameras.zmq import ZMQCameraConfig  # noqa: F401
-from lerobot.src.lerobot.configs import parser
-from lerobot.src.lerobot.robots import (  # noqa: F401
+from lerobot.cameras.opencv import OpenCVCameraConfig  # noqa: F401
+from lerobot.cameras.realsense import RealSenseCameraConfig  # noqa: F401
+from lerobot.cameras.zmq import ZMQCameraConfig  # noqa: F401
+from lerobot.configs import parser
+from lerobot.robots import (  # noqa: F401
     unitree_g1 as unitree_g1_robot,
 )
-from lerobot.src.lerobot.rollout import RolloutConfig, build_rollout_context, create_strategy
-from lerobot.src.lerobot.robots import Robot, RobotConfig, bi_openarm_follower, bi_rebot_b601_follower, bi_so_follower, earthrover_mini_plus, hope_jr, koch_follower, omx_follower, openarm_follower, reachy2, rebot_b601_follower, so_follower
-from lerobot.src.lerobot.teleoperators import Teleoperator, TeleoperatorConfig, bi_openarm_leader, bi_rebot_102_leader, bi_so_leader, homunculus, koch_leader, omx_leader, openarm_leader, openarm_mini, reachy2_teleoperator, rebot_102_leader, so_leader
-from lerobot.src.lerobot.teleoperators import (  # noqa: F401
+from lerobot.rollout import RolloutConfig, build_rollout_context, create_strategy
+from lerobot.robots import Robot, RobotConfig, bi_openarm_follower, bi_rebot_b601_follower, bi_so_follower, earthrover_mini_plus, hope_jr, koch_follower, omx_follower, openarm_follower, reachy2, rebot_b601_follower, so_follower
+from lerobot.teleoperators import Teleoperator, TeleoperatorConfig, bi_openarm_leader, bi_rebot_102_leader, bi_so_leader, homunculus, koch_leader, omx_leader, openarm_leader, openarm_mini, reachy2_teleoperator, rebot_102_leader, so_leader
+from lerobot.teleoperators import (  # noqa: F401
     unitree_g1,
 )
-from lerobot.src.lerobot.utils.import_utils import register_third_party_plugins
-from lerobot.src.lerobot.utils.process import ProcessSignalHandler
-from lerobot.src.lerobot.utils.utils import init_logging
-from lerobot.src.lerobot.utils.visualization_utils import init_rerun
+from lerobot.utils.import_utils import register_third_party_plugins
+from lerobot.utils.process import ProcessSignalHandler
+from lerobot.utils.utils import init_logging
+from lerobot.utils.visualization_utils import init_rerun
 
 logger = logging.getLogger(__name__)
 

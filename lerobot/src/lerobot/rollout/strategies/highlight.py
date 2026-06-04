@@ -24,13 +24,13 @@ import time
 from concurrent.futures import Future, ThreadPoolExecutor
 from threading import Event as ThreadingEvent, Lock
 
-from lerobot.src.lerobot.common.control_utils import is_headless
-from lerobot.src.lerobot.datasets import VideoEncodingManager
-from lerobot.src.lerobot.utils.constants import ACTION, OBS_STR
-from lerobot.src.lerobot.utils.feature_utils import build_dataset_frame
-from lerobot.src.lerobot.utils.import_utils import _pynput_available, require_package
-from lerobot.src.lerobot.utils.robot_utils import precise_sleep
-from lerobot.src.lerobot.utils.utils import log_say
+from lerobot.common.control_utils import is_headless
+from lerobot.datasets import VideoEncodingManager
+from lerobot.utils.constants import ACTION, OBS_STR
+from lerobot.utils.feature_utils import build_dataset_frame
+from lerobot.utils.import_utils import _pynput_available, require_package
+from lerobot.utils.robot_utils import precise_sleep
+from lerobot.utils.utils import log_say
 
 from ..configs import HighlightStrategyConfig
 from ..context import RolloutContext

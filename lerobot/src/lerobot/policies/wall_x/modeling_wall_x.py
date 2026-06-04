@@ -49,8 +49,8 @@ from torch import Tensor
 from torch.distributions import Beta
 from torch.nn import CrossEntropyLoss
 
-from lerobot.src.lerobot.utils.constants import ACTION, OBS_STATE
-from lerobot.src.lerobot.utils.import_utils import (
+from lerobot.utils.constants import ACTION, OBS_STATE
+from lerobot.utils.import_utils import (
     _wallx_deps_available,
     require_package,
 )

@@ -16,9 +16,9 @@
 
 from dataclasses import dataclass, field
 
-from lerobot.src.lerobot.configs import FeatureType, NormalizationMode, PolicyFeature, PreTrainedConfig
-from lerobot.src.lerobot.optim import AdamWConfig, CosineDecayWithWarmupSchedulerConfig
-from lerobot.src.lerobot.utils.constants import ACTION, OBS_STATE
+from lerobot.configs import FeatureType, NormalizationMode, PolicyFeature, PreTrainedConfig
+from lerobot.optim import AdamWConfig, CosineDecayWithWarmupSchedulerConfig
+from lerobot.utils.constants import ACTION, OBS_STATE
 
 
 @PreTrainedConfig.register_subclass("groot")

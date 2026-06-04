@@ -24,9 +24,9 @@ import torch
 import torch.nn.functional as F  # noqa: N812
 from tqdm import tqdm
 
-from lerobot.src.lerobot.datasets import LeRobotDataset
-from lerobot.src.lerobot.utils.constants import ACTION, DONE, OBS_IMAGE, REWARD
-from lerobot.src.lerobot.utils.transition import Transition
+from lerobot.datasets import LeRobotDataset
+from lerobot.utils.constants import ACTION, DONE, OBS_IMAGE, REWARD
+from lerobot.utils.transition import Transition
 
 
 class BatchTransition(TypedDict):

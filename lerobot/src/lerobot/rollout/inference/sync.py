@@ -22,9 +22,9 @@ from copy import copy
 
 import torch
 
-from lerobot.src.lerobot.policies.pretrained import PreTrainedPolicy
-from lerobot.src.lerobot.policies.utils import make_robot_action, prepare_observation_for_inference
-from lerobot.src.lerobot.processor import PolicyProcessorPipeline
+from lerobot.policies.pretrained import PreTrainedPolicy
+from lerobot.policies.utils import make_robot_action, prepare_observation_for_inference
+from lerobot.processor import PolicyProcessorPipeline
 
 from .base import InferenceEngine
 

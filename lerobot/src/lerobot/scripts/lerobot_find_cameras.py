@@ -37,9 +37,9 @@ from typing import Any
 import numpy as np
 from PIL import Image
 
-from lerobot.src.lerobot.cameras import ColorMode
-from lerobot.src.lerobot.cameras.opencv import OpenCVCamera, OpenCVCameraConfig
-from lerobot.src.lerobot.cameras.realsense import RealSenseCamera, RealSenseCameraConfig
+from lerobot.cameras import ColorMode
+from lerobot.cameras.opencv import OpenCVCamera, OpenCVCameraConfig
+from lerobot.cameras.realsense import RealSenseCamera, RealSenseCameraConfig
 
 logger = logging.getLogger(__name__)
 

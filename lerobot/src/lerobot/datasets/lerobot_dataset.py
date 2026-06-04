@@ -18,14 +18,14 @@ import logging
 from collections.abc import Callable
 from pathlib import Path
 
-import lerobot.src.lerobot.datasets as datasets
+import lerobot.datasets as datasets
 import torch
 import torch.utils
 from huggingface_hub import HfApi, snapshot_download
 from huggingface_hub.errors import RevisionNotFoundError
 
-from lerobot.src.lerobot.configs import VideoEncoderConfig
-from lerobot.src.lerobot.utils.constants import HF_LEROBOT_HUB_CACHE
+from lerobot.configs import VideoEncoderConfig
+from lerobot.utils.constants import HF_LEROBOT_HUB_CACHE
 
 from .dataset_metadata import CODEBASE_VERSION, LeRobotDatasetMetadata
 from .dataset_reader import DatasetReader

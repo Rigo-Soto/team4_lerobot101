@@ -33,18 +33,18 @@ from pprint import pformat
 
 import draccus
 
-from lerobot.src.lerobot.cameras.opencv import OpenCVCameraConfig  # noqa: F401
-from lerobot.src.lerobot.cameras.realsense import RealSenseCameraConfig  # noqa: F401
-from lerobot.src.lerobot.robots import (  # noqa: F401
+from lerobot.cameras.opencv import OpenCVCameraConfig  # noqa: F401
+from lerobot.cameras.realsense import RealSenseCameraConfig  # noqa: F401
+from lerobot.robots import (  # noqa: F401
     so_follower,
 )
-from lerobot.src.lerobot.robots import Robot, RobotConfig, bi_openarm_follower, bi_rebot_b601_follower, bi_so_follower, hope_jr, koch_follower, lekiwi, make_robot_from_config, omx_follower, openarm_follower, rebot_b601_follower
-from lerobot.src.lerobot.teleoperators import Teleoperator, TeleoperatorConfig, bi_openarm_leader, bi_rebot_102_leader, bi_so_leader, homunculus, koch_leader, make_teleoperator_from_config, omx_leader, openarm_leader, openarm_mini, rebot_102_leader, so_leader
-from lerobot.src.lerobot.teleoperators import (  # noqa: F401
+from lerobot.robots import Robot, RobotConfig, bi_openarm_follower, bi_rebot_b601_follower, bi_so_follower, hope_jr, koch_follower, lekiwi, make_robot_from_config, omx_follower, openarm_follower, rebot_b601_follower
+from lerobot.teleoperators import Teleoperator, TeleoperatorConfig, bi_openarm_leader, bi_rebot_102_leader, bi_so_leader, homunculus, koch_leader, make_teleoperator_from_config, omx_leader, openarm_leader, openarm_mini, rebot_102_leader, so_leader
+from lerobot.teleoperators import (  # noqa: F401
     unitree_g1,
 )
-from lerobot.src.lerobot.utils.import_utils import register_third_party_plugins
-from lerobot.src.lerobot.utils.utils import init_logging
+from lerobot.utils.import_utils import register_third_party_plugins
+from lerobot.utils.utils import init_logging
 
 
 @dataclass

@@ -14,8 +14,8 @@
 
 from dataclasses import dataclass, field
 
-from lerobot.src.lerobot.cameras import CameraConfig, Cv2Rotation
-from lerobot.src.lerobot.cameras.opencv import OpenCVCameraConfig
+from lerobot.cameras import CameraConfig, Cv2Rotation
+from lerobot.cameras.opencv import OpenCVCameraConfig
 
 from ..config import RobotConfig
 

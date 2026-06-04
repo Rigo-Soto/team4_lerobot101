@@ -17,13 +17,13 @@
 import logging
 import time
 
-from lerobot.src.lerobot.motors import Motor, MotorCalibration, MotorNormMode
-from lerobot.src.lerobot.motors.dynamixel import (
+from lerobot.motors import Motor, MotorCalibration, MotorNormMode
+from lerobot.motors.dynamixel import (
     DriveMode,
     DynamixelMotorsBus,
     OperatingMode,
 )
-from lerobot.src.lerobot.utils.decorators import check_if_already_connected, check_if_not_connected
+from lerobot.utils.decorators import check_if_already_connected, check_if_not_connected
 
 from ..teleoperator import Teleoperator
 from .config_omx_leader import OmxLeaderConfig

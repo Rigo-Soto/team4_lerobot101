@@ -17,12 +17,12 @@
 import logging
 import time
 
-from lerobot.src.lerobot.motors import Motor, MotorCalibration, MotorNormMode
-from lerobot.src.lerobot.motors.feetech import (
+from lerobot.motors import Motor, MotorCalibration, MotorNormMode
+from lerobot.motors.feetech import (
     FeetechMotorsBus,
     OperatingMode,
 )
-from lerobot.src.lerobot.utils.decorators import check_if_already_connected, check_if_not_connected
+from lerobot.utils.decorators import check_if_already_connected, check_if_not_connected
 
 from ..teleoperator import Teleoperator
 from .config_so_leader import SOLeaderTeleopConfig

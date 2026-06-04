@@ -23,12 +23,12 @@ import gymnasium as gym
 import numpy as np
 import torch
 
-from lerobot.src.lerobot.cameras import opencv  # noqa: F401
-from lerobot.src.lerobot.configs import parser
-from lerobot.src.lerobot.datasets import LeRobotDataset
-from lerobot.src.lerobot.envs import HILSerlRobotEnvConfig
-from lerobot.src.lerobot.model import RobotKinematics
-from lerobot.src.lerobot.processor import (
+from lerobot.cameras import opencv  # noqa: F401
+from lerobot.configs import parser
+from lerobot.datasets import LeRobotDataset
+from lerobot.envs import HILSerlRobotEnvConfig
+from lerobot.model import RobotKinematics
+from lerobot.processor import (
     AddBatchDimensionProcessorStep,
     AddTeleopActionAsComplimentaryDataStep,
     AddTeleopEventsAsInfoStep,
@@ -52,28 +52,28 @@ from lerobot.src.lerobot.processor import (
     create_transition,
     identity_transition,
 )
-from lerobot.src.lerobot.robots import (  # noqa: F401
+from lerobot.robots import (  # noqa: F401
     so_follower,
 )
-from lerobot.src.lerobot.robots.robot import Robot
-from lerobot.src.lerobot.robots.so_follower.robot_kinematic_processor import (
+from lerobot.robots.robot import Robot
+from lerobot.robots.so_follower.robot_kinematic_processor import (
     EEBoundsAndSafety,
     EEReferenceAndDelta,
     ForwardKinematicsJointsToEEObservation,
     GripperVelocityToJoint,
     InverseKinematicsRLStep,
 )
-from lerobot.src.lerobot.robots import RobotConfig, make_robot_from_config
-from lerobot.src.lerobot.teleoperators import gamepad, keyboard, make_teleoperator_from_config
-from lerobot.src.lerobot.teleoperators import (
+from lerobot.robots import RobotConfig, make_robot_from_config
+from lerobot.teleoperators import gamepad, keyboard, make_teleoperator_from_config
+from lerobot.teleoperators import (
     so_leader,  # noqa: F401
 )
-from lerobot.src.lerobot.teleoperators.teleoperator import Teleoperator
-from lerobot.src.lerobot.teleoperators.utils import TeleopEvents
-from lerobot.src.lerobot.utils.constants import ACTION, DONE, OBS_IMAGES, OBS_STATE, REWARD
-from lerobot.src.lerobot.utils.import_utils import require_package
-from lerobot.src.lerobot.utils.robot_utils import precise_sleep
-from lerobot.src.lerobot.utils.utils import log_say
+from lerobot.teleoperators.teleoperator import Teleoperator
+from lerobot.teleoperators.utils import TeleopEvents
+from lerobot.utils.constants import ACTION, DONE, OBS_IMAGES, OBS_STATE, REWARD
+from lerobot.utils.import_utils import require_package
+from lerobot.utils.robot_utils import precise_sleep
+from lerobot.utils.utils import log_say
 
 from .joint_observations_processor import JointVelocityProcessorStep, MotorCurrentProcessorStep
 

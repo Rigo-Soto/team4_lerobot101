@@ -25,7 +25,7 @@ import torch
 import torch.nn.functional as F  # noqa: N812
 from torch import Tensor, nn
 
-from lerobot.src.lerobot.utils.import_utils import _transformers_available, require_package
+from lerobot.utils.import_utils import _transformers_available, require_package
 
 # Conditional import for type checking and lazy loading
 if TYPE_CHECKING or _transformers_available:
@@ -49,8 +49,8 @@ else:
     PaliGemmaForConditionalGenerationWithPiGemma = None
 
 
-from lerobot.src.lerobot.configs import PreTrainedConfig
-from lerobot.src.lerobot.utils.constants import (
+from lerobot.configs import PreTrainedConfig
+from lerobot.utils.constants import (
     ACTION,
     OBS_LANGUAGE_ATTENTION_MASK,
     OBS_LANGUAGE_TOKENS,

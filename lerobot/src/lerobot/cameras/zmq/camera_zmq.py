@@ -34,15 +34,15 @@ import cv2
 import numpy as np
 from numpy.typing import NDArray
 
-from lerobot.src.lerobot.utils.import_utils import _zmq_available, require_package
+from lerobot.utils.import_utils import _zmq_available, require_package
 
 if TYPE_CHECKING or _zmq_available:
-    import lerobot.src.lerobot.cameras.zmq as zmq
+    import lerobot.cameras.zmq as zmq
 else:
     zmq = None
 
-from lerobot.src.lerobot.utils.decorators import check_if_already_connected, check_if_not_connected
-from lerobot.src.lerobot.utils.errors import DeviceNotConnectedError
+from lerobot.utils.decorators import check_if_already_connected, check_if_not_connected
+from lerobot.utils.errors import DeviceNotConnectedError
 
 from ..camera import Camera
 from ..configs import ColorMode

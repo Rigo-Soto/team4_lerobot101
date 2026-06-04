@@ -217,8 +217,8 @@ from pathlib import Path
 
 import draccus
 
-from lerobot.src.lerobot.configs import parser
-from lerobot.src.lerobot.datasets import (
+from lerobot.configs import parser
+from lerobot.datasets import (
     LeRobotDataset,
     convert_image_to_video_dataset,
     delete_episodes,
@@ -229,9 +229,9 @@ from lerobot.src.lerobot.datasets import (
     remove_feature,
     split_dataset,
 )
-from lerobot.src.lerobot.configs import VideoEncoderConfig, camera_encoder_defaults
-from lerobot.src.lerobot.utils.constants import HF_LEROBOT_HOME
-from lerobot.src.lerobot.utils.utils import init_logging
+from lerobot.configs import VideoEncoderConfig, camera_encoder_defaults
+from lerobot.utils.constants import HF_LEROBOT_HOME
+from lerobot.utils.utils import init_logging
 
 
 @dataclass

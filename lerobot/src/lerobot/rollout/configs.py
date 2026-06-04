@@ -22,12 +22,12 @@ from dataclasses import dataclass, field
 
 import draccus
 
-from lerobot.src.lerobot.configs import parser
-from lerobot.src.lerobot.configs.dataset import DatasetRecordConfig
-from lerobot.src.lerobot.robots.config import RobotConfig
-from lerobot.src.lerobot.configs import PreTrainedConfig
-from lerobot.src.lerobot.teleoperators.config import TeleoperatorConfig
-from lerobot.src.lerobot.utils.device_utils import auto_select_torch_device, is_torch_device_available
+from lerobot.configs import parser
+from lerobot.configs.dataset import DatasetRecordConfig
+from lerobot.robots.config import RobotConfig
+from lerobot.configs import PreTrainedConfig
+from lerobot.teleoperators.config import TeleoperatorConfig
+from lerobot.utils.device_utils import auto_select_torch_device, is_torch_device_available
 
 from .inference import InferenceEngineConfig, SyncInferenceConfig
 
