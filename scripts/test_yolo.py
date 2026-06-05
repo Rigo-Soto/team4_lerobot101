@@ -13,7 +13,7 @@ def main():
 
 	cfg = CFG_PATH
 	weights = WEIGHTS_PATH
-	detector = YOLODetector("backup/yolov4-tiny-custom_final.weights", "custom_cfg/yolov4-tiny-custom.cfg")
+	detector = YOLODetector("backup/yolov4-tiny-custom_final.weights", "custom_cfg/yolov4-tiny-custom.cfg", conf_threshold=0.2)
 
 	cap = cv2.VideoCapture(2)
 

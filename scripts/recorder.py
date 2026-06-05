@@ -18,10 +18,10 @@ from pathlib import Path
 import cv2
 
 
-NUM_EPISODES = 5
+NUM_EPISODES = 100
 FPS = 30
-EPISODE_TIME_SEC = 60
-RESET_TIME_SEC = 10
+EPISODE_TIME_SEC = 27
+RESET_TIME_SEC = 0
 TASK_DESCRIPTION = "LEGO deconstructor"
 
 WORK_DIR = Path(".").resolve()
@@ -32,7 +32,7 @@ PORT_LEADER = "/dev/ttyACM0"
 PORT_FOLLOW = "/dev/ttyACM1"
 CAM_INDEX = 2
 
-YOLO_CONF_THRESHOLD = 0.45
+YOLO_CONF_THRESHOLD = 0.2
 YOLO_NMS_THRESHOLD  = 0.4
 YOLO_CLASS_NAMES = ["base", "column"]               # must match your training order
 YOLO_CAMERA_KEY  = "front"                          # which camera to run YOLO on
