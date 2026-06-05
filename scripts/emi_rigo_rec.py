@@ -62,8 +62,8 @@ def main():
     dataset_features = {**action_features, **obs_features}
 
     dataset = LeRobotDataset.create(
-        repo_id="emiliano-ng/so101-pilares003",
-        root="../dataset/so101-pilares-blanco/angel03",
+        repo_id="emiliano-ng/so101-pilares004",
+        root="../dataset/so101-pilares-blanco/angel04",
 	 fps=FPS,
 	features=dataset_features,
 	robot_type=robot.name,
