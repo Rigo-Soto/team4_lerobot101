@@ -1,4 +1,18 @@
-# LEGO disassembler
+
+# Development Team
+- Arturo Balboa
+- Oscar de la Rosa
+- Angel Hernandez
+- Emiliano Niño
+- Rigoberto Soto
+
+
+# Building
+
+pip install git+https://github.com/huggingface/lerobot@1396b9fab7aecddd10006c33c47a487ffdcb54b4
+
+
+# Introduction: LEGO disassembler
 Disarm a column of legos, store it in a designated area
 
 Using the lerobot library and a SO101 pair of leader and follower, this reposiroey contains the 
@@ -6,26 +20,23 @@ necesary environment for the development and training of a Inverse Reinforcement
 model based on the _(insert final decision here)_ techique.
 
 ## Setup
-The setup consisits in a base where the arms are secured and the camera is placed. the base and 
-column that will be detached are put in the range of vision of the camera in order for the task 
-to be executed
+The setup consists of two bases. The first base holds the red column in its initial position, where it can be detected and picked up by the robotic arm. The second base is the target area where the red column will be placed after the robot grabs and releases it.
 
-**TODO: ADD IMAGES**
+The camera is positioned to keep both bases within its field of view, allowing the system to detect the object and execute the pick-and-place task.
 
+![SO101 robot setup](readme_images/Setup1.jpeg)
 
-## Building
+# Problem formulation
 
-pip install git+https://github.com/huggingface/lerobot@1396b9fab7aecddd10006c33c47a487ffdcb54b4
+# Dataset
 
+# Methodology
 
-## Running 
+# System Architecture
 
+# Experiments
 
-### Development Team
-- Arturo Balboa
-- Oscar de la Rosa
-- Angel Hernandez
-- Emiliano Niño
-- Rigoberto Soto
+# Results
 
+# Conclusion
 
