@@ -3,23 +3,38 @@ import cv2
 import os
 import time
 from pathlib import Path
+import av
 
 WORK_DIR = Path(".").resolve()
 CFG_PATH = WORK_DIR / "custom_cfg/yolov4-tiny-custom.cfg"
 WEIGHTS_PATH = WORK_DIR / "backup/yolov4-tiny-custom_final.weights"
+ 
+
+def iter_video_frames_av(video_path: Path):
+    with av.open(str(video_path)) as container:
+        stream = container.streams.video[0]
+        stream.codec_context.thread_type = "AUTO"
+        for packet in container.demux(stream):
+            for frame in packet.decode():
+                yield cv2.cvtColor(
+                    frame.to_ndarray(format="rgb24"),
+                    cv2.COLOR_RGB2BGR
+                )
 
 def main():
 	# detector = YOLODetector('backup/yolov4-tiny-custom_final.weights', 'custom_cfg/yolov4-tiny-custom.cfg', use_gpu=False, conf_threshold=0.1)
 
 	cfg = CFG_PATH
 	weights = WEIGHTS_PATH
-	detector = YOLODetector("backup/yolov4-tiny-custom_final.weights", "custom_cfg/yolov4-tiny-custom.cfg", conf_threshold=0.2)
+	detector = YOLODetector(WEIGHTS_PATH, CFG_PATH, conf_threshold=0.02)
 
 	cap = cv2.VideoCapture(2)
+#	cap = cv2.VideoCapture("./dataset/test_single_episode/videos/observation.images.front/chunk-000/file-000.mp4")
 
 	while cap.isOpened():
 		ret,frame = cap.read()
 
+#	for frame in iter_video_frames_av("./dataset/test_single_episode/videos/observation.images.front/chunk-000/file-000.mp4"):
 		if frame is None:
 			print("noframe")
 			continue	
@@ -35,6 +50,7 @@ def main():
 		cv2.imshow("papu", overlay)
 		cv2.waitKey(1)
 		time.sleep(1/30) 
+
 
 if __name__ == '__main__':
 	main()

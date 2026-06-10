@@ -10,15 +10,18 @@ from lerobot.utils.utils import log_say
 from lerobot.utils.visualization_utils import init_rerun
 from lerobot.scripts.lerobot_record import record_loop
 from lerobot.processor import make_default_processors
+from lerobot.policies.pretrained import PreTrainedPolicy
+from lerobot.policies.factory import make_pre_post_processors
 
 from yolo_extract import YOLODetector, extract_feature_vector
 
 import logging
 from pathlib import Path
 import cv2
+import numpy as np
 
 
-NUM_EPISODES = 100
+NUM_EPISODES = 5
 FPS = 30
 EPISODE_TIME_SEC = 27
 RESET_TIME_SEC = 0
@@ -27,6 +30,7 @@ TASK_DESCRIPTION = "LEGO deconstructor"
 WORK_DIR = Path(".").resolve()
 CFG_PATH = WORK_DIR / "custom_cfg/yolov4-tiny-custom.cfg"
 WEIGHTS_PATH = WORK_DIR / "backup/yolov4-tiny-custom_final.weights"
+PRETRAINED_DIR = WORK_DIR / "outputs/angel01/checkpoints/100000/pretrained_model/"
 
 PORT_LEADER = "/dev/ttyACM0"
 PORT_FOLLOW = "/dev/ttyACM1"
@@ -40,6 +44,13 @@ YOLO_FEATURE_DIM = 16                               # fixed vector length — do
  
 # Set True to draw bounding boxes on the camera feed (useful during recording)
 YOLO_DEBUG_OVERLAY = True
+YOLO_FEATURE_NAMES = [
+    "base_cx", "base_cy", "base_bw", "base_bh",
+    "base_conf", "base_area", "base_valid",
+    "col_cx", "col_cy", "col_bw", "col_bh",
+    "col_conf", "col_area", "col_valid",
+    "delta_x", "delta_y",
+]
 
 class YOLOObservationProcessor:
     """
@@ -104,7 +115,19 @@ class YOLOObservationProcessor:
  
         # Step 3 — append feature vector
         feat_vec = extract_feature_vector(detections, np_frame.shape if frame is not None else (480, 640))
-        processed["observation.yolo_features"] = feat_vec
+        feat_vec = np.asarray(
+            extract_feature_vector(detections, np_frame.shape if np_frame is not None else (480, 640)),
+            dtype=np.float32,
+        ).reshape(-1)
+        
+        if feat_vec.shape[0] != len(YOLO_FEATURE_NAMES):
+            raise ValueError(
+                f"YOLO feature length mismatch: got {feat_vec.shape[0]}, "
+                f"expected {len(YOLO_FEATURE_NAMES)}"
+            )
+
+        for name, value in zip(YOLO_FEATURE_NAMES, feat_vec, strict=True):
+            processed[name] = float(value)
  
         return processed
  
@@ -148,14 +171,8 @@ def main():
         port=PORT_FOLLOW,
     )
 
-    teleop_config = SO101LeaderConfig(
-        id="lider_de_la_rosa",
-        port=PORT_LEADER,
-    )
-
     # Initialize the robot and teleoperator
     robot = SO101Follower(robot_config)
-    teleop = SO101Leader(teleop_config)
 
     # Configure the dataset features
     action_features = hw_to_dataset_features(robot.action_features, "action")
@@ -163,9 +180,13 @@ def main():
     yolo_features = make_yolo_dataset_feature()
     dataset_features = {**action_features, **obs_features, **yolo_features}
 
+    from lerobot.policies.act.modeling_act import ACTPolicy
+
+    pol_config = ACTPolicy.from_pretrained(str(PRETRAINED_DIR))
+
     # Create the dataset
     dataset = LeRobotDataset.create(
-        repo_id="legoDataset",
+        repo_id="emiliano-ng/eval_act_your_dataset",
         fps=FPS,
         features=dataset_features,
         robot_type=robot.name,
@@ -179,10 +200,9 @@ def main():
 
     # Connect the robot and teleoperator
     robot.connect()
-    teleop.connect()
 
     # Create the required processors
-    teleop_action_processor, robot_action_processor, robot_observation_processor = make_default_processors()
+    teleop_action_processor , robot_action_processor, robot_observation_processor = make_default_processors()
 
     # Wrap the standard observation processor with the YOLO layer
     yolo_observation_processor = YOLOObservationProcessor(
@@ -190,6 +210,12 @@ def main():
         detector=detector,
         debug_overlay=YOLO_DEBUG_OVERLAY,
     )
+
+    preprocessor, postprocessor = make_pre_post_processors(
+        policy_cfg=pol_config.config,
+        pretrained_path=str(PRETRAINED_DIR),
+    )
+    pol_config.eval()
 
     episode_idx = 0
     while episode_idx < NUM_EPISODES and not events["stop_recording"]:
@@ -202,11 +228,13 @@ def main():
             teleop_action_processor=teleop_action_processor,
             robot_action_processor=robot_action_processor,
             robot_observation_processor=yolo_observation_processor,
-            teleop=teleop,
             dataset=dataset,
             control_time_s=EPISODE_TIME_SEC,
             single_task=TASK_DESCRIPTION,
             display_data=True,
+            policy=pol_config,
+            preprocessor=preprocessor,
+            postprocessor=postprocessor,
         )
 
         # Reset the environment if not stopping or re-recording
@@ -219,10 +247,12 @@ def main():
                 teleop_action_processor=teleop_action_processor,
                 robot_action_processor=robot_action_processor,
                 robot_observation_processor=robot_observation_processor,
-                teleop=teleop,
                 control_time_s=RESET_TIME_SEC,
                 single_task=TASK_DESCRIPTION,
                 display_data=True,
+                policy=pol_config,
+                preprocessor=preprocessor,
+                postprocessor=postprocessor,
             )
 
         if events["rerecord_episode"]:
@@ -238,7 +268,6 @@ def main():
     # Clean up
     log_say("Stop recording")
     robot.disconnect()
-    teleop.disconnect()
 
 if __name__ == '__main__':
     main()

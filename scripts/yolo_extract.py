@@ -21,7 +21,7 @@ from darknet_detect import BOX,DETECTION,IMAGE
 import darknet_detect as darknet
 
 
-CLASS_NAMES = ["base", "column"]  # Debe coincidir con tu .names / entrenamiento
+CLASS_NAMES = ["claw", "column", "base"]  # Debe coincidir con tu .names / entrenamiento
 CONF_THRESHOLD = 0.45
 NMS_THRESHOLD = 0.4
 

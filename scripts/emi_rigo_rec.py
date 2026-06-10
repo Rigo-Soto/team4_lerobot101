@@ -20,7 +20,7 @@ EPISODE_TIME_SEC = 27
 # CAMBIAR entre sesiones de grabación:
 #   Sesión 1 (pilar rojo):   "Grab red pillar and place in box"
 #   Sesión 2 (pilar blanco): "Grab white pillar and place in box"
-TASK_DESCRIPTION = "Grab white pillar and place in box"
+TASK_DESCRIPTION = "LEGO deconstructor"
 
 PORT_LEADER = "/dev/ttyACM0"
 PORT_FOLLOW = "/dev/ttyACM1"
