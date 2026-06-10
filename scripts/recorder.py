@@ -93,7 +93,7 @@ def main():
     # Create the dataset
     dataset = LeRobotDataset.create(
         repo_id="emiliano-ng/so101-pilares",
-        root=DATASET_ROOT
+        root=DATASET_ROOT,
         fps=FPS,
         features=dataset_features,
         robot_type=robot.name,
