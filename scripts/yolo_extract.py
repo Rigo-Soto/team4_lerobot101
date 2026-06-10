@@ -21,7 +21,7 @@ from darknet_detect import BOX,DETECTION,IMAGE
 import darknet_detect as darknet
 
 
-CLASS_NAMES = ["claw", "column", "base"]  # Debe coincidir con tu .names / entrenamiento
+CLASS_NAMES = ["claw", "column", "base"]  
 CONF_THRESHOLD = 0.45
 NMS_THRESHOLD = 0.4
 
@@ -231,17 +231,31 @@ def extract_feature_vector(
     """
     Returns a 16-dim vector regardless of which objects are detected.
     Missing detections are zero-filled.
+
+    Absolute positions
+    Confidece
+    Validity
+    Distance to column
+    
+    
     """
+    YOLO_FEATURE_NAMES = [
+        "base_cx", "base_cy", "base_bw", "base_bh",
+        "base_conf", "base_area", "base_valid",
+        "col_cx", "col_cy", "col_bw", "col_bh",
+        "col_conf", "col_area", "col_valid",
+        "delta_x", "delta_y",
+    ]
 
     H, W = frame_shape[:2]
     feat = np.zeros(16, dtype=np.float32)
 
-    for idx, cls in enumerate(["base", "column"]):
-        base_i = idx * 7
+    for idx, cls in enumerate(CLASS_NAMES): # For each YOLO class (claw, base, col)
+        base_i = idx * 4
         det = detections.get(cls)
 
         if det is None:
-            feat[base_i + 6] = 0.0
+            feat[base_i + 3] = 0.0
             continue
 
         x, y, bw, bh = det["bbox"]
@@ -249,16 +263,13 @@ def extract_feature_vector(
 
         feat[base_i + 0] = cx / W
         feat[base_i + 1] = cy / H
-        feat[base_i + 2] = bw / W
-        feat[base_i + 3] = bh / H
-        feat[base_i + 4] = det["confidence"]
-        feat[base_i + 5] = (bw * bh) / (W * H)
-        feat[base_i + 6] = 1.0
+        feat[base_i + 2] = det["confidence"]
+        feat[base_i + 3] = 1.0
 
     if "base" in detections and "column" in detections:
         bcx, bcy = detections["base"]["centroid"]
         ccx, ccy = detections["column"]["centroid"]
-        feat[14] = (ccx - bcx) / W
-        feat[15] = (ccy - bcy) / H
+        feat[12] = (ccx - bcx) / W
+        feat[13] = (ccy - bcy) / H
 
     return feat
