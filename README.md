@@ -112,7 +112,7 @@ Qualitatively, the system demonstrated the ability to detect the object, execute
 
 To support the evaluation of demonstration quality and trajectory behavior, the robot joint states were extracted from the recorded Parquet dataset and plotted over time. Each plot shows one complete demonstration episode.
 
-The raw trajectory information is stored in the `data/` folder, including the original Parquet file used for analysis. The generated trajectory plots are stored in the `readme_images/` folder, where additional episode figures are also available for inspection.
+The raw trajectory information is stored in the `Sample-Results/` folder, including the original Parquet file used for analysis. The generated trajectory plots are stored in the `readme_images/` folder, where additional episode figures are also available for inspection.
 
 The plotted state variables correspond to the six SO101 joint positions:
 
@@ -135,7 +135,7 @@ These plots help visualize how the robot configuration changes during the task. 
 
 The state trajectories show the evolution of the robot joints during the manipulation sequence. Although the episodes follow a similar task structure, the trajectories are not fully smooth. The sharp changes in several joints indicate manual corrections, abrupt movements, or variability in the demonstrations, which may affect the stability and generalization of the learned policy.
 
-Additional episode plots are included in the `readme_images/` folder, while the raw data used to generate them remains available in the `data/` folder for reproducibility.
+Additional episode plots are included in the `readme_images/` folder, while the raw data used to generate them remains available in the `Sample-Results/` folder for reproducibility.
 
 ## 10. Feasibility and Limitations
 The project is feasible with the available SO101 hardware, camera, and self-collected demonstrations. The current system already integrates perception, learning, and robot control in a complete pipeline.
@@ -160,7 +160,7 @@ The next development steps should focus on improving robustness and generalizati
 ## 12. Repository Structure
 - `backup/`: YOLO weight files and training checkpoints.
 - `custom_cfg/`: Darknet configuration, class names, and data files.
-- `data/`: raw recorded dataset information, including the Parquet trajectory data used for state analysis.
+- `Sample-Results/`: raw recorded dataset information, including the Parquet trajectory data used for state analysis.
 - `libs/`: external Darknet library files.
 - `readme_images/`: setup image and generated robot state trajectory plots for different demonstration episodes.
 - `scripts/`: recording, detection, and dataset utilities.
@@ -181,7 +181,7 @@ The presentation material is consistent with the following visual sections in th
 - Robot state trajectory episode 0: [readme_images/states_episode_0.png](readme_images/states_episode_0.png)
 - Robot state trajectory episode 1: [readme_images/states_episode_1.png](readme_images/states_episode_1.png)
 - Additional robot state trajectory episodes are available in the `readme_images/` folder.
-- Raw trajectory data is available in the `data/` folder.
+- Raw trajectory data is available in the `Sample-Results/` folder.
 
 ## 15. Conclusion
 This project demonstrates a complete experimental pipeline for autonomous LEGO column disassembly using the SO101 platform. The combination of YOLO-based perception, LeRobot data collection, and ACT policy learning provides a viable foundation for more robust manipulation experiments. Although the current performance is still limited by dataset size and camera sensitivity, the results confirm that the approach is technically sound and can be extended with more data and better calibration.
