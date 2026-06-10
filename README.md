@@ -1,76 +1,154 @@
-# Development Team
+# TE3002B.101 - Final Project Report
+
+## Development Team
 - Arturo Balboa
 - Oscar de la Rosa
 - Angel Hernandez
 - Emiliano Niño
 - Rigoberto Soto
 
+## Executive Summary
+This project presents a robotic manipulation system designed for the autonomous disassembly of a LEGO column using an SO101 leader-follower setup. The proposed solution combines visual perception, imitation learning, and robot control to identify the target object, grasp it, transport it, and place it in a designated storage area.
 
-# Building
-
-pip install git+https://github.com/huggingface/lerobot@1396b9fab7aecddd10006c33c47a487ffdcb54b4
-
-
-# Introduction: LEGO disassembler
-Disarm a column of legos, store it in a designated area
-
-Using the lerobot library and a SO101 pair of leader and follower, this repository contains the 
-neccessary environment for the development and training of a Inverse Reinforcement Learning
-model based on the ACT technique.
-
-## Setup
-The setup consists of two bases. The first base holds the red column in its initial position, where it can be detected and picked up by the robotic arm. The second base is the target area where the red column will be placed after the robot grabs and releases it.
-
-The camera is positioned to keep both bases within its field of view, allowing the system to detect the object and execute the pick-and-place task.
+The implementation is built on the LeRobot framework and integrates a YOLO-based detector with an ACT (Action Chunking Transformer) policy. The system was trained from expert demonstrations collected during teleoperated executions of the task and evaluated under different workspace conditions.
 
 ![SO101 robot setup](readme_images/Setup1.jpeg)
 
-# Problem formulation
-The objective of this project is to enable the SO101 robot to autonomously disassemble a LEGO column by identifying, grasping, and relocating it to a designated storage area.
+## 1. Project Context
+The objective of the project is to enable the SO101 robot to perform a complete manipulation sequence in a structured workspace: detect the LEGO column, approach it, grasp it, remove it from its initial position, transport it, and release it in a storage area without human intervention.
 
-The robot receives visual information from a workspace camera together with its current state, including arm position and gripper status. Based on this information, it must determine the sequence of actions required to complete the task.
+The task is relevant because it combines perception and control under natural variability in object placement, camera viewpoint, and lighting conditions. In practice, the robot must operate from visual observations and its own state information, which makes the problem suitable for data-driven control policies.
 
-The challenge consists of learning a control policy capable of performing the complete manipulation sequence under different object positions and workspace configurations. The desired behavior includes detecting the LEGO column, approaching it, grasping it, removing it from its initial position, transporting it to the storage area, and releasing it inside the designated container.
+## 2. Problem Statement and Hypothesis
+**Problem statement:** determine whether the SO101 robot can learn to detect, disassemble, and store a LEGO column from expert demonstrations while maintaining consistent performance when the object appears in different positions within the workspace.
 
-A task execution is considered successful when the LEGO column is correctly removed from the assembly area and deposited inside the storage container without human intervention.
+**Hypothesis:** if the SO101 robot is trained with expert demonstrations and uses a YOLO-based detection model to localize the LEGO column, then it will be able to reproduce the disassembly and storage task autonomously, even when the object appears in positions not observed during training.
 
-# Dataset
-The dataset was collected using the SO101 leader-follower setup provided by the LeRobot framework. During data collection, an operator manually executed the complete LEGO disassembly task while the system recorded observations and robot actions.
+## 3. Objective
+Develop an ACT-based control policy capable of detecting, disassembling, and storing a LEGO column autonomously by combining visual information with the robot state.
 
-A total of approximately 250 demonstrations were initially collected. After reviewing the recordings, the demonstrations with the highest execution quality and task consistency were selected. The final dataset consists of 50 successful demonstrations covering the complete manipulation sequence from object detection to final placement.
+## 4. Experimental Setup
+The experimental setup consists of two bases and a workspace camera:
 
-Each demonstration includes:
+- The first base holds the LEGO column in its initial position.
+- The second base acts as the storage or destination area.
+- The camera observes both bases so that the system can detect the object and execute the pick-and-place sequence.
+
+This arrangement allows the robot to identify the target object, plan the grasp, and complete the transfer under a controlled but non-trivial scenario.
+
+## 5. Dataset
+The dataset was collected with the SO101 leader-follower configuration provided by LeRobot. During data acquisition, an operator manually executed the full task while the system recorded observations and actions.
+
+A total of approximately 250 demonstrations were collected. After reviewing the trajectories, the 50 highest-quality demonstrations were selected for the final dataset. Each demonstration includes:
 
 - RGB camera observations.
 - Robot joint state information.
 - Gripper state information.
 - Action trajectories executed during the task.
 
-The final dataset was uploaded to Hugging Face and is publicly available at:
+The dataset was published on Hugging Face:
 
 https://huggingface.co/datasets/emiliano-ng/SO101
 
-# Methodology
-The proposed solution combines a perception module and a learning-based control policy.
+## 6. Methodology
+The proposed solution is composed of two main blocks: perception and policy learning.
 
-A YOLO object detection model is used to identify and localize the target LEGO column within the workspace. The detected object information is combined with the robot state to generate the observations used by the policy.
+First, a YOLO detector localizes the LEGO column in the workspace. The detector is implemented through a Darknet wrapper and is used to extract a compact feature vector from the image stream. The observed object information is then combined with robot state data to form the input representation for the control policy.
 
-The collected demonstrations are used to train a policy capable of reproducing the behavior observed in the dataset. Training was performed using the LeRobot framework for 10,000 training steps.
+Second, the collected demonstrations are used to train an ACT policy within the LeRobot framework. The policy learns to reproduce the manipulation behavior observed in the dataset and outputs the next action chunk required to continue the task.
 
-Throughout the training process, model performance and training metrics were monitored using Weights & Biases (WandB), allowing continuous tracking of loss values and training progress.
+Training progress and metrics were monitored with Weights & Biases (WandB) to track loss evolution and learning stability. The presentation reports a training run of 100,000 steps, while the repository README originally documented a 10,000-step training configuration.
 
-After training, the resulting model is capable of receiving the current observation and predicting the next robot action required to complete the task. The trained model was published on Hugging Face and is available at:
+The trained model was published on Hugging Face:
 
 https://huggingface.co/emiliano-ng/SO101_Model
 
-# System Architecture
+## 7. System Architecture
+The system follows a simple perception-to-control pipeline:
 
+1. The RGB camera captures the workspace.
+2. YOLO detects the LEGO column and relevant workspace objects.
+3. The detector outputs a fixed-length feature vector.
+4. The robot state and visual features are fed to the ACT policy.
+5. The policy predicts the next action sequence.
+6. The SO101 follower executes the action in the physical workspace.
 
-# Experiments
+In the repository, this flow is supported by the following components:
 
+- [scripts/recorder.py](scripts/recorder.py) records demonstrations and appends YOLO features to LeRobot observations.
+- [scripts/yolo_extract.py](scripts/yolo_extract.py) performs YOLO inference and feature extraction.
+- [scripts/darknet_detect.py](scripts/darknet_detect.py) loads the Darknet backend through ctypes.
+- [scripts/lerobot_dataset_config.py](scripts/lerobot_dataset_config.py) defines the observation keys used by the dataset.
 
-# Results
+## 8. Experimental Design
+The experimentation process considered both dataset quality and task robustness.
 
+### Training stage
+- 250 demonstrations were collected.
+- 50 high-quality trajectories were selected.
+- The ACT policy was trained using the selected demonstrations.
+- Metrics were monitored during training to verify convergence.
 
-# Conclusion
+### Variability in the dataset
+- Demonstrations were captured at different times of day.
+- The workspace included natural lighting variations.
+- The LEGO column appeared in different initial positions.
+
+### Evaluation stage
+- New object positions were tested.
+- YOLO was used to validate detection.
+- The grasp, transport, and storage phases were evaluated separately.
+
+## 9. Results
+The presentation reports the following execution results:
+
+- Pick success rate: 4/10 = 40%.
+- Place success rate: 8/10 = 80%.
+- Overall success rate: 63%.
+
+Qualitatively, the system demonstrated the ability to detect the object, execute the grasp, and complete several successful placements. The results also show that the place phase was more reliable than the pick phase, which suggests that object localization and grasp initiation remain the main sources of error.
+
+## 10. Feasibility and Limitations
+The project is feasible with the available SO101 hardware, camera, and self-collected demonstrations. The current system already integrates perception, learning, and robot control in a complete pipeline.
+
+The main limitations identified in the presentation are the following:
+
+- The dataset is limited and was collected manually.
+- Small camera movements have a strong impact on performance.
+- The model does not yet generalize well to other colors or object positions.
+- Training times were long and restricted the number of tests that could be performed.
+
+## 11. Future Work
+The next development steps should focus on improving robustness and generalization:
+
+- Expand the dataset with different camera positions.
+- Add more object classes.
+- Increase the number of demonstrations.
+- Make the robot motion slower and safer.
+- Reduce sensitivity to camera angle.
+- Test different base positions in the workspace.
+
+## 12. Repository Structure
+- `backup/`: YOLO weight files and training checkpoints.
+- `custom_cfg/`: Darknet configuration, class names, and data files.
+- `libs/`: external Darknet library files.
+- `readme_images/`: figures used in the report.
+- `scripts/`: recording, detection, and dataset utilities.
+
+## 13. Installation
+The project depends on LeRobot and the Darknet-based YOLO detector.
+
+```bash
+pip install git+https://github.com/huggingface/lerobot@1396b9fab7aecddd10006c33c47a487ffdcb54b4
+```
+
+Before running the YOLO utilities, build Darknet with OpenCV support and place `libdarknet.so` inside `libs/`.
+
+## 14. Reference Figures
+The presentation material is consistent with the following visual sections in the repository:
+
+- System setup: [readme_images/Setup1.jpeg](readme_images/Setup1.jpeg)
+
+## 15. Conclusion
+This project demonstrates a complete experimental pipeline for autonomous LEGO column disassembly using the SO101 platform. The combination of YOLO-based perception, LeRobot data collection, and ACT policy learning provides a viable foundation for more robust manipulation experiments. Although the current performance is still limited by dataset size and camera sensitivity, the results confirm that the approach is technically sound and can be extended with more data and better calibration.
 
