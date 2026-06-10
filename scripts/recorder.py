@@ -11,7 +11,7 @@ from lerobot.utils.visualization_utils import init_rerun
 from lerobot.scripts.lerobot_record import record_loop
 from lerobot.processor import make_default_processors
 
-from yolo_extract import YOLODetector, extract_feature_vector
+from yolo_extract import YOLODetector, extract_feature_vector, YOLO_FEATURE_NAMES, YOLOObservationProcessor
 
 import logging
 from pathlib import Path
