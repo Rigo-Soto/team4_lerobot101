@@ -13,7 +13,7 @@ from lerobot.processor import make_default_processors
 from lerobot.policies.pretrained import PreTrainedPolicy
 from lerobot.policies.factory import make_pre_post_processors
 
-from yolo_extract import YOLODetector, extract_feature_vector
+from yolo_extract import YOLODetector, extract_feature_vector, YOLO_FEATURE_NAMES, YOLOObservationProcessor
 
 import logging
 from pathlib import Path
@@ -44,93 +44,6 @@ YOLO_FEATURE_DIM = 16                               # fixed vector length — do
  
 # Set True to draw bounding boxes on the camera feed (useful during recording)
 YOLO_DEBUG_OVERLAY = True
-YOLO_FEATURE_NAMES = [
-    "base_cx", "base_cy", "base_bw", "base_bh",
-    "base_conf", "base_area", "base_valid",
-    "col_cx", "col_cy", "col_bw", "col_bh",
-    "col_conf", "col_area", "col_valid",
-    "delta_x", "delta_y",
-]
-
-class YOLOObservationProcessor:
-    """
-    Wraps the standard LeRobot robot_observation_processor and appends a YOLO
-    feature vector to every observation dict before it is handed to record_loop.
- 
-    Usage:
-        base_processor = make_default_processors()[2]   # robot_observation_processor
-        yolo_processor = YOLOObservationProcessor(base_processor, detector)
-        # Pass yolo_processor as robot_observation_processor to record_loop
-    """
- 
-    def __init__(
-        self,
-        base_processor: any,
-        detector: YOLODetector,
-        debug_overlay: bool = False,
-    ):
-        self.base_processor  = base_processor
-        self.detector        = detector
-        # LeRobot stores images under this key pattern in the observation dict
-        self.image_obs_key   = f"front"
-        self.debug_overlay   = debug_overlay
-        self._last_detections: dict = {}   # expose for external logging
- 
-    def __call__(self, observation: dict) -> dict:
-        """
-        1. Run the standard processor (handles image resizing, normalisation, etc.)
-        2. Grab the processed camera frame and run YOLO inference.
-        3. Inject `observation.yolo_features` into the output dict.
-        """
-        # Step 1 — standard processing
-        processed = self.base_processor(observation)
- 
-        # Step 2 — YOLO inference on the designated camera frame
-        frame = processed.get(self.image_obs_key)
-        if frame is not None:
-            # frame may be a torch.Tensor (C, H, W) or np.ndarray (H, W, C)
-            frame = cv2.cvtColor(frame, cv2.COLOR_RGB2BGR)
-            if hasattr(frame, "numpy"):
-                # Convert CHW float tensor → HWC uint8 for OpenCV
-                np_frame = (frame.permute(1, 2, 0).numpy() * 255).astype(np.uint8)
-            else:
-                np_frame = frame
- 
-            detections = self.detector.detect(np_frame)
-            self._last_detections = detections
- 
-            if self.debug_overlay:
-                overlay = self.detector.draw_overlay(np_frame, detections)
-                # Display in a separate window; press 'q' in the main rerun view to close
-                cv2.imshow("YOLO detections", overlay)
-                cv2.waitKey(1)
-        else:
-            logging.warning(
-                f"[YOLO] Key '{self.image_obs_key}' not found in observation. "
-                "Check that YOLO_CAMERA_KEY matches your camera config."
-            )
-
-            detections = {}
-            self._last_detections = {}
- 
-        # Step 3 — append feature vector
-        feat_vec = extract_feature_vector(detections, np_frame.shape if frame is not None else (480, 640))
-        feat_vec = np.asarray(
-            extract_feature_vector(detections, np_frame.shape if np_frame is not None else (480, 640)),
-            dtype=np.float32,
-        ).reshape(-1)
-        
-        if feat_vec.shape[0] != len(YOLO_FEATURE_NAMES):
-            raise ValueError(
-                f"YOLO feature length mismatch: got {feat_vec.shape[0]}, "
-                f"expected {len(YOLO_FEATURE_NAMES)}"
-            )
-
-        for name, value in zip(YOLO_FEATURE_NAMES, feat_vec, strict=True):
-            processed[name] = float(value)
- 
-        return processed
- 
  
 def make_yolo_dataset_feature() -> dict:
     """
@@ -143,16 +56,7 @@ def make_yolo_dataset_feature() -> dict:
         "observation.yolo_features": {
             "dtype": "float32",
             "shape": (YOLO_FEATURE_DIM,),
-            "names": [
-                # base (7)
-                "base_cx", "base_cy", "base_bw", "base_bh",
-                "base_conf", "base_area", "base_valid",
-                # column (7)
-                "col_cx", "col_cy", "col_bw", "col_bh",
-                "col_conf", "col_area", "col_valid",
-                # relative pose (2)
-                "delta_x", "delta_y",
-            ],
+            "names": YOLO_FEATURE_NAMES,
         }
     }
 

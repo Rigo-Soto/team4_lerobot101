@@ -26,6 +26,13 @@ CONF_THRESHOLD = 0.45
 NMS_THRESHOLD = 0.4
 
 
+YOLO_FEATURE_NAMES = [
+    "base_cx", "base_cy", "base_bw", "base_bh",
+    "base_conf", "base_area", "base_valid",
+    "col_cx", "col_cy", "col_bw", "col_bh",
+    "col_conf", "col_area", "col_valid",
+    "delta_x", "delta_y",
+]
 
 
 def _resolve_path(path: str | Path, base_dir: Path | None = None) -> Path:
@@ -215,13 +222,90 @@ class YOLODetector:
                 label,
                 (x, max(y - 6, 12)),
                 cv2.FONT_HERSHEY_SIMPLEX,
-                0.55,
-                colour,
+                0.55, colour,
                 2,
             )
 
         return out
 
+class YOLOObservationProcessor:
+    """
+    Wraps the standard LeRobot robot_observation_processor and appends a YOLO
+    feature vector to every observation dict before it is handed to record_loop.
+ 
+    Usage:
+        base_processor = make_default_processors()[2]   # robot_observation_processor
+        yolo_processor = YOLOObservationProcessor(base_processor, detector)
+        # Pass yolo_processor as robot_observation_processor to record_loop
+    """
+ 
+    def __init__(
+        self,
+        base_processor: any,
+        detector: YOLODetector,
+        debug_overlay: bool = False,
+    ):
+        self.base_processor  = base_processor
+        self.detector        = detector
+        # LeRobot stores images under this key pattern in the observation dict
+        self.image_obs_key   = f"front"
+        self.debug_overlay   = debug_overlay
+        self._last_detections: dict = {}   # expose for external logging
+ 
+    def __call__(self, observation: dict) -> dict:
+        """
+        1. Run the standard processor (handles image resizing, normalisation, etc.)
+        2. Grab the processed camera frame and run YOLO inference.
+        3. Inject `observation.yolo_features` into the output dict.
+        """
+        # Step 1 — standard processing
+        processed = self.base_processor(observation)
+ 
+        # Step 2 — YOLO inference on the designated camera frame
+        frame = processed.get(self.image_obs_key)
+        if frame is not None:
+            # frame may be a torch.Tensor (C, H, W) or np.ndarray (H, W, C)
+            frame = cv2.cvtColor(frame, cv2.COLOR_RGB2BGR)
+            if hasattr(frame, "numpy"):
+                # Convert CHW float tensor → HWC uint8 for OpenCV
+                np_frame = (frame.permute(1, 2, 0).numpy() * 255).astype(np.uint8)
+            else:
+                np_frame = frame
+ 
+            detections = self.detector.detect(np_frame)
+            self._last_detections = detections
+ 
+            if self.debug_overlay:
+                overlay = self.detector.draw_overlay(np_frame, detections)
+                # Display in a separate window; press 'q' in the main rerun view to close
+                cv2.imshow("YOLO detections", overlay)
+                cv2.waitKey(1)
+        else:
+            logging.warning(
+                f"[YOLO] Key '{self.image_obs_key}' not found in observation. "
+                "Check that YOLO_CAMERA_KEY matches your camera config."
+            )
+
+            detections = {}
+            self._last_detections = {}
+ 
+        # Step 3 — append feature vector
+        feat_vec = extract_feature_vector(detections, np_frame.shape if frame is not None else (480, 640))
+        feat_vec = np.asarray(
+            extract_feature_vector(detections, np_frame.shape if np_frame is not None else (480, 640)),
+            dtype=np.float32,
+        ).reshape(-1)
+        
+        if feat_vec.shape[0] != len(YOLO_FEATURE_NAMES):
+            raise ValueError(
+                f"YOLO feature length mismatch: got {feat_vec.shape[0]}, "
+                f"expected {len(YOLO_FEATURE_NAMES)}"
+            )
+
+        for name, value in zip(YOLO_FEATURE_NAMES, feat_vec, strict=True):
+            processed[name] = float(value)
+ 
+        return processed
 
 def extract_feature_vector(
     detections: dict,
@@ -232,21 +316,16 @@ def extract_feature_vector(
     Returns a 16-dim vector regardless of which objects are detected.
     Missing detections are zero-filled.
 
-    Absolute positions
-    Confidece
-    Validity
-    Distance to column
-    
+    -> For each detection
+    Absolute position X [0,4,8]
+    Absolute position Y[1,5,9]
+    Confidece[2,6,10]
+    Validity[3,7,11]
+
+    Distance claw to column [12, 13]
+    Distance claw to base [14, 15]
     
     """
-    YOLO_FEATURE_NAMES = [
-        "base_cx", "base_cy", "base_bw", "base_bh",
-        "base_conf", "base_area", "base_valid",
-        "col_cx", "col_cy", "col_bw", "col_bh",
-        "col_conf", "col_area", "col_valid",
-        "delta_x", "delta_y",
-    ]
-
     H, W = frame_shape[:2]
     feat = np.zeros(16, dtype=np.float32)
 
@@ -269,7 +348,12 @@ def extract_feature_vector(
     if "base" in detections and "column" in detections:
         bcx, bcy = detections["base"]["centroid"]
         ccx, ccy = detections["column"]["centroid"]
-        feat[12] = (ccx - bcx) / W
-        feat[13] = (ccy - bcy) / H
+        gcx, gcy = detections["claw"]["centroid"]
+        feat[12] = (ccx - gcx) / W # X dist to Column
+        feat[13] = (ccy - gcy) / H # Y dist to Column
+
+        feat[14] = (bcx - gcx) / W # X dist to Base
+        feat[15] = (bcy - gcy) / H # X dist to Base
 
     return feat
+

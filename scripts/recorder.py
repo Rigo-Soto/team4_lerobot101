@@ -28,86 +28,21 @@ WORK_DIR = Path(".").resolve()
 CFG_PATH = WORK_DIR / "custom_cfg/yolov4-tiny-custom.cfg"
 WEIGHTS_PATH = WORK_DIR / "backup/yolov4-tiny-custom_final.weights"
 
+DATASET_ROOT = WORK_DIR / "dataset/artur01/"
+
 PORT_LEADER = "/dev/ttyACM0"
 PORT_FOLLOW = "/dev/ttyACM1"
 CAM_INDEX = 2
 
 YOLO_CONF_THRESHOLD = 0.2
 YOLO_NMS_THRESHOLD  = 0.4
-YOLO_CLASS_NAMES = ["base", "column"]               # must match your training order
+YOLO_CLASS_NAMES = ["claw","column","base"]               # must match your training order
 YOLO_CAMERA_KEY  = "front"                          # which camera to run YOLO on
 YOLO_FEATURE_DIM = 16                               # fixed vector length — do not change
  
 # Set True to draw bounding boxes on the camera feed (useful during recording)
 YOLO_DEBUG_OVERLAY = True
 
-class YOLOObservationProcessor:
-    """
-    Wraps the standard LeRobot robot_observation_processor and appends a YOLO
-    feature vector to every observation dict before it is handed to record_loop.
- 
-    Usage:
-        base_processor = make_default_processors()[2]   # robot_observation_processor
-        yolo_processor = YOLOObservationProcessor(base_processor, detector)
-        # Pass yolo_processor as robot_observation_processor to record_loop
-    """
- 
-    def __init__(
-        self,
-        base_processor: any,
-        detector: YOLODetector,
-        debug_overlay: bool = False,
-    ):
-        self.base_processor  = base_processor
-        self.detector        = detector
-        # LeRobot stores images under this key pattern in the observation dict
-        self.image_obs_key   = f"front"
-        self.debug_overlay   = debug_overlay
-        self._last_detections: dict = {}   # expose for external logging
- 
-    def __call__(self, observation: dict) -> dict:
-        """
-        1. Run the standard processor (handles image resizing, normalisation, etc.)
-        2. Grab the processed camera frame and run YOLO inference.
-        3. Inject `observation.yolo_features` into the output dict.
-        """
-        # Step 1 — standard processing
-        processed = self.base_processor(observation)
- 
-        # Step 2 — YOLO inference on the designated camera frame
-        frame = processed.get(self.image_obs_key)
-        if frame is not None:
-            # frame may be a torch.Tensor (C, H, W) or np.ndarray (H, W, C)
-            frame = cv2.cvtColor(frame, cv2.COLOR_RGB2BGR)
-            if hasattr(frame, "numpy"):
-                # Convert CHW float tensor → HWC uint8 for OpenCV
-                np_frame = (frame.permute(1, 2, 0).numpy() * 255).astype(np.uint8)
-            else:
-                np_frame = frame
- 
-            detections = self.detector.detect(np_frame)
-            self._last_detections = detections
- 
-            if self.debug_overlay:
-                overlay = self.detector.draw_overlay(np_frame, detections)
-                # Display in a separate window; press 'q' in the main rerun view to close
-                cv2.imshow("YOLO detections", overlay)
-                cv2.waitKey(1)
-        else:
-            logging.warning(
-                f"[YOLO] Key '{self.image_obs_key}' not found in observation. "
-                "Check that YOLO_CAMERA_KEY matches your camera config."
-            )
-
-            detections = {}
-            self._last_detections = {}
- 
-        # Step 3 — append feature vector
-        feat_vec = extract_feature_vector(detections, np_frame.shape if frame is not None else (480, 640))
-        processed["observation.yolo_features"] = feat_vec
- 
-        return processed
- 
  
 def make_yolo_dataset_feature() -> dict:
     """
@@ -120,18 +55,10 @@ def make_yolo_dataset_feature() -> dict:
         "observation.yolo_features": {
             "dtype": "float32",
             "shape": (YOLO_FEATURE_DIM,),
-            "names": [
-                # base (7)
-                "base_cx", "base_cy", "base_bw", "base_bh",
-                "base_conf", "base_area", "base_valid",
-                # column (7)
-                "col_cx", "col_cy", "col_bw", "col_bh",
-                "col_conf", "col_area", "col_valid",
-                # relative pose (2)
-                "delta_x", "delta_y",
-            ],
+            "names": YOLO_FEATURE_NAMES,
         }
     }
+
 
 
 def main():
@@ -165,7 +92,8 @@ def main():
 
     # Create the dataset
     dataset = LeRobotDataset.create(
-        repo_id="legoDataset",
+        repo_id="emiliano-ng/so101-pilares",
+        root=DATASET_ROOT
         fps=FPS,
         features=dataset_features,
         robot_type=robot.name,
@@ -191,8 +119,17 @@ def main():
         debug_overlay=YOLO_DEBUG_OVERLAY,
     )
 
+    print(f"\n  Tarea: {TASK_DESCRIPTION}")
+    print(f" {NUM_EPISODES} Episodes to be recorded")
+    print(f"  Episode length (s): {EPISODE_TIME_SEC}s")
+    print(f"  Controls: RETURN = save | r = discard and re-record episode\n")
     episode_idx = 0
+
     while episode_idx < NUM_EPISODES and not events["stop_recording"]:
+        input(
+            f"\n  ── Episode {episode_idx + 1}/{NUM_EPISODES} ──\n"
+            f" Press RETURN to start recording"
+        )
         log_say(f"Recording episode {episode_idx + 1} of {NUM_EPISODES}")
 
         record_loop(
@@ -208,6 +145,21 @@ def main():
             single_task=TASK_DESCRIPTION,
             display_data=True,
         )
+
+        
+        decision = input(
+            f" Episode recorded! \n"
+            f" Press RETURN to save and continue \n "
+            f" Press 'R' to discard and repeat \n\n"
+            f"  > "
+        ).strip().lower()
+
+        if decision == "r":
+            dataset.clear_episode_buffer()
+            log_say("Episode discarded")
+            print("Episode discarded")
+            continue
+        # ──────────────────────────────────────────────────────────────────────
 
         # Reset the environment if not stopping or re-recording
         if not events["stop_recording"] and (episode_idx < NUM_EPISODES - 1 or events["rerecord_episode"]):

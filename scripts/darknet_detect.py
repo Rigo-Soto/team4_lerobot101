@@ -17,6 +17,7 @@ darknet_dir = Path(".").resolve()
 
 lib_path = darknet_dir / "libs/libdarknet.so"
 
+print(str(lib_path))
 lib = CDLL(str(lib_path), mode=RTLD_GLOBAL)
 
 class METADATA(Structure):
