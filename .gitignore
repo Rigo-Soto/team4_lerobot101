@@ -1,6 +1,9 @@
 # I dont want any images in the repo, they sould be somewhere else...
 # The README images should ideally be .png to prevent confusion
 dataset/*
+
+# Old files for previos datasets and weights
+*.zip 
 *.jpg
 
 

@@ -28,7 +28,6 @@ ARG PYTHON_VERSION=3.12
 # Configure environment variables
 ENV DEBIAN_FRONTEND=noninteractive \
     MUJOCO_GL=egl \
-    PATH=/lerobot/.venv/bin:$PATH \
     CUDA_VISIBLE_DEVICES=0 \
     TEST_TYPE=single_gpu \
     DEVICE=cuda
@@ -72,12 +71,12 @@ RUN uv venv --python python${PYTHON_VERSION}
 RUN uv pip install opencv-python
 
 # Install Python dependencies for caching
-COPY --chown=user_lerobot:user_lerobot lerobot/setup.py lerobot/pyproject.toml lerobot/uv.lock README.md lerobot/MANIFEST.in ./
-COPY --chown=user_lerobot:user_lerobot lerobot/src/ src/
+#COPY --chown=user_lerobot:user_lerobot lerobot/setup.py lerobot/pyproject.toml lerobot/uv.lock README.md lerobot/MANIFEST.in ./
+#COPY --chown=user_lerobot:user_lerobot lerobot/src/ src/
 
-RUN uv sync --locked --extra all --no-cache
+# RUN uv sync --locked --extra all --no-cache
 
-RUN chmod +x /lerobotws/.venv/lib/python${PYTHON_VERSION}/site-packages/triton/backends/nvidia/bin/ptxas
+#RUN chmod +x /lerobotws/.venv/lib/python${PYTHON_VERSION}/site-packages/triton/backends/nvidia/bin/ptxas
 
 # Copy the rest of the application source code
 # Make sure to have the git-LFS files for testing
